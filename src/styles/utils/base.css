@@ -1,0 +1,47 @@
+html {
+  scroll-behavior: smooth;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: #e5e9f0;
+}
+
+::selection {
+  background: rgba(51, 191, 242, 0.35);
+  color: #fff;
+}
+
+@utility text-gradient-blue {
+  background: linear-gradient(180deg, #7fe0ff 0%, #33a9f2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility btn-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-400) 0%,
+    var(--color-brand-600) 100%
+  );
+}
+
+@utility card-border {
+  border: 1px solid rgba(93, 168, 235, 0.16);
+}
+
+@utility eyebrow {
+  letter-spacing: 0.16em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+}

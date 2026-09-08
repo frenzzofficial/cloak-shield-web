@@ -1,0 +1,30 @@
+.glow {
+  box-shadow: 0 0 40px rgba(51, 191, 242, 0.25);
+}
+
+.grid-fade {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(51, 191, 242, 0.08),
+    transparent 70%
+  );
+}
+
+.text-gradient-blue {
+  background: linear-gradient(180deg, #7fe0ff 0%, #33a9f2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, #5fd4f7 0%, #2f8ff0 100%);
+}
+
+.card-border {
+  border: 1px solid rgba(93, 168, 235, 0.16);
+}
+
+.eyebrow {
+  letter-spacing: 0.16em;
+}
