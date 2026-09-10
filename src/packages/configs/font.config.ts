@@ -7,7 +7,7 @@ export const sansFont = Inter({
   display: "swap",
 });
 
-export const monoFont = Caveat({
+export const handFont = Caveat({
   subsets: ["latin"],
   variable: "--font-caveat",
   weight: ["500", "600", "700"],

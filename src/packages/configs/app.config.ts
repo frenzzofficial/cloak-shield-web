@@ -33,7 +33,7 @@ export const appConfig = {
     },
     {
       name: "YouTube",
-      url: "https://www.youtube.com/channel/UC3-5-2-0-3v-1-4",
+      url: "https://www.youtube.com/@cloak-shield-web",
       icon: "youtube",
     },
   ],
