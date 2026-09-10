@@ -1,4 +1,5 @@
-import Link from "next/link";
+import NextLink from "next/link";
+import { Button, Card, Link } from "@/components/ui";
 import ImageLogo from "@/components/ui/image/ImageLogo";
 import {
   ArrowRightIcon,
@@ -68,19 +69,21 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a
-              href="#get-started"
+            <Link
+              variant={"primary"}
+              href="/features"
               className="btn-gradient flex items-center gap-2 rounded-lg px-6 py-3 text-[14.5px] font-semibold text-[#02121f] shadow-glow transition-transform hover:scale-[1.02]"
             >
               Get Started Free
               <ArrowRightIcon className="h-4 w-4" />
-            </a>
-            <a
-              href="#docs"
+            </Link>
+            <Link
+              variant={"outline"}
+              href="/docs"
               className="rounded-lg border border-brand-500/40 px-6 py-3 text-[14.5px] font-semibold text-brand-400 transition-colors hover:border-brand-500 hover:text-brand-300"
             >
               View Documentation
-            </a>
+            </Link>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-8">
@@ -136,72 +139,92 @@ export default function Hero() {
           </div>
 
           {/* Sign-in card mockup */}
-          <div className="relative z-10 w-full max-w-75 rounded-2xl border border-white/10 bg-[#080d16]/95 p-6 shadow-2xl backdrop-blur-sm">
-            <h3 className="text-[17px] font-semibold text-white">
-              Welcome Back
-            </h3>
-            <p className="mt-1 text-[12.5px] text-slate-500">
-              Sign in to your account
-            </p>
-
-            <div className="mt-5 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5">
-              <MailIcon className="h-4 w-4 text-slate-500" />
-              <span className="text-[13px] text-slate-500">
-                you@yourapp.com
-              </span>
-            </div>
-            <div className="mt-3 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5">
-              <LockIcon className="h-4 w-4 text-slate-500" />
-              <span className="flex-1 text-[13px] text-slate-500">
-                Your password
-              </span>
-              <EyeIcon className="h-4 w-4 text-slate-500" />
-            </div>
-
-            <div className="mt-3.5 flex items-center justify-between text-[12px]">
-              <div className="flex items-center gap-1.5 text-slate-400">
-                <span className="h-3.5 w-3.5 rounded border border-slate-600" />
-                Remember me
-              </div>
-              <Link href="#" className="text-brand-400 hover:text-brand-300">
-                Forgot password?
-              </Link>
-            </div>
-
-            <button
-              type="button"
-              className="btn-gradient mt-4 w-full rounded-lg py-2.5 text-[13.5px] font-semibold text-[#02121f]"
-            >
-              Sign In
-            </button>
-
-            <div className="mt-5 flex items-center gap-3">
-              <span className="h-px flex-1 bg-white/10" />
-              <span className="text-[11px] text-slate-500">
-                or continue with
-              </span>
-              <span className="h-px flex-1 bg-white/10" />
-            </div>
-
-            <div className="mt-4 flex gap-2.5">
-              {[GithubIcon, GoogleIcon, DiscordIcon].map((Icon, _i) => (
-                <button
-                  type="button"
-                  key={Icon.toString()}
-                  className="flex flex-1 items-center justify-center rounded-lg border border-white/10 bg-white/3 py-2.5 text-white transition-colors hover:bg-white/6"
+          <Card>
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-brand-400/60 to-transparent" />{" "}
+            <div className="relative z-10 transform-[translateZ(30px)]">
+              {" "}
+              <h3 className="text-[17px] font-semibold text-white">
+                {" "}
+                Welcome Back{" "}
+              </h3>{" "}
+              <p className="mt-1 text-[12.5px] text-slate-500">
+                {" "}
+                Sign in to your account{" "}
+              </p>{" "}
+              <div className="mt-5 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5 transition-colors hover:border-brand-400/20">
+                {" "}
+                <MailIcon className="h-4 w-4 text-slate-500" />{" "}
+                <span className="text-[13px] text-slate-500">
+                  {" "}
+                  you@yourapp.com{" "}
+                </span>{" "}
+              </div>{" "}
+              <div className="mt-3 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5 transition-colors hover:border-brand-400/20">
+                {" "}
+                <LockIcon className="h-4 w-4 text-slate-500" />{" "}
+                <span className="flex-1 text-[13px] text-slate-500">
+                  {" "}
+                  Your password{" "}
+                </span>{" "}
+                <EyeIcon className="h-4 w-4 text-slate-500" />{" "}
+              </div>{" "}
+              <div className="mt-3.5 flex items-center justify-between text-[12px]">
+                {" "}
+                <div className="flex items-center gap-1.5 text-slate-400">
+                  {" "}
+                  <span className="h-3.5 w-3.5 rounded border border-slate-600" />{" "}
+                  Remember me{" "}
+                </div>{" "}
+                <NextLink
+                  href="#"
+                  className="text-brand-400 transition-colors hover:text-brand-300"
                 >
-                  <Icon className="h-4 w-4" />
-                </button>
-              ))}
+                  {" "}
+                  Forgot password?{" "}
+                </NextLink>{" "}
+              </div>{" "}
+              <Button
+                type="button"
+                className="btn-gradient mt-4 w-full rounded-lg py-2.5 text-[13.5px] font-semibold text-[#02121f]"
+              >
+                {" "}
+                Sign In{" "}
+              </Button>{" "}
+              <div className="mt-5 flex items-center gap-3">
+                {" "}
+                <span className="h-px flex-1 bg-white/10" />{" "}
+                <span className="text-[11px] text-slate-500">
+                  {" "}
+                  or continue with{" "}
+                </span>{" "}
+                <span className="h-px flex-1 bg-white/10" />{" "}
+              </div>{" "}
+              <div className="mt-4 flex gap-2.5">
+                {" "}
+                {[GithubIcon, GoogleIcon, DiscordIcon].map((Icon) => (
+                  <button
+                    type="button"
+                    key={Icon.toString()}
+                    className="flex flex-1 items-center justify-center rounded-lg border border-white/10 bg-white/3 py-2.5 text-white transition-colors hover:bg-white/6"
+                  >
+                    {" "}
+                    <Icon className="h-4 w-4" />{" "}
+                  </button>
+                ))}{" "}
+              </div>{" "}
+              <p className="mt-4 text-center text-[12px] text-slate-500">
+                {" "}
+                Don&apos;t have an account?{" "}
+                <NextLink
+                  href="#"
+                  className="text-brand-400 transition-colors hover:text-brand-300"
+                >
+                  {" "}
+                  Create one{" "}
+                </NextLink>{" "}
+              </p>{" "}
             </div>
-
-            <p className="mt-4 text-center text-[12px] text-slate-500">
-              Don&apos;t have an account?{" "}
-              <Link href="#" className="text-brand-400 hover:text-brand-300">
-                Create one
-              </Link>
-            </p>
-          </div>
+          </Card>
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 .glow {
-  box-shadow: 0 0 40px rgba(51, 191, 242, 0.25);
+  box-shadow: 0 0 5px var(--color-primary);
 }
 
 .grid-fade {

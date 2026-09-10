@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui";
 import {
   CookieIcon,
   LayersIcon,
@@ -64,10 +65,7 @@ export default function Services() {
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {services.map((s) => (
-            <div
-              key={s.title}
-              className="glow card-border flex flex-col rounded-xl bg-white/1.5 p-5 transition-colors hover:bg-white/3"
-            >
+            <Card key={s.title} className="glow">
               <span className="mb-4 flex h-9 w-9 items-center justify-center text-brand-400">
                 {s.iconWrap === false ? s.icon : s.icon}
               </span>
@@ -81,7 +79,7 @@ export default function Services() {
               >
                 {s.desc}
               </p>
-            </div>
+            </Card>
           ))}
         </div>
       </div>
