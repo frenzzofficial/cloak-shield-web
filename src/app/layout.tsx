@@ -20,7 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${sansFont.variable} ${handFont.variable} ${romanticFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full relative flex flex-col">
+      <body className="min-h-full relative flex flex-col dark">
         <AppClientLayout>{children}</AppClientLayout>
       </body>
     </html>
