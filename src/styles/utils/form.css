@@ -5,7 +5,6 @@
 .form-page {
   position: relative;
   display: flex;
-  min-width: 480px;
   min-height: 100svh;
   align-items: center;
   justify-content: center;
@@ -41,16 +40,12 @@
   content: "";
 
   background:
-    radial-gradient(
-      circle at 50% 45%,
+    radial-gradient(circle at 50% 45%,
       color-mix(in oklch, var(--primary) 8%, transparent),
-      transparent 55%
-    ),
-    linear-gradient(
-      to bottom,
+      transparent 55%),
+    linear-gradient(to bottom,
       color-mix(in oklch, var(--background) 15%, transparent),
-      color-mix(in oklch, var(--background) 45%, transparent)
-    );
+      color-mix(in oklch, var(--background) 45%, transparent));
 
   pointer-events: none;
 }
@@ -66,6 +61,16 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+/* ========================================
+   Large Desktop
+   ======================================== */
+
+@media (min-width: 1280px) {
+  .form-page__container {
+    min-width: 480px;
+  }
 }
 
 /* ========================================
@@ -107,11 +112,9 @@
 
   border-radius: 0.875rem;
 
-  background: linear-gradient(
-    145deg,
-    color-mix(in oklch, var(--card) 92%, transparent),
-    color-mix(in oklch, var(--background) 82%, transparent)
-  );
+  background: linear-gradient(145deg,
+      color-mix(in oklch, var(--card) 92%, transparent),
+      color-mix(in oklch, var(--background) 82%, transparent));
 
   box-shadow:
     0 20px 80px color-mix(in oklch, var(--background) 70%, transparent),
@@ -119,6 +122,10 @@
 
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+
+  /* Cursor-tracked border shine (updated via JS in useCardInteractive). */
+  --shine-x: 50%;
+  --shine-y: 50%;
 }
 
 /* ========================================
@@ -138,6 +145,45 @@
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
 
   opacity: 0.6;
+}
+
+/* ========================================
+   Card Border Shine (follows cursor on hover)
+   ======================================== */
+
+.form-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  border-radius: inherit;
+  padding: 1px;
+
+  content: "";
+
+  background: radial-gradient(240px circle at var(--shine-x) var(--shine-y),
+      color-mix(in oklch, var(--primary) 90%, white 10%),
+      transparent 70%);
+
+  opacity: 0;
+
+  transition: opacity var(--motion-fast, 250ms) var(--motion-ease, ease-out);
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.form-card:hover::after,
+.form-card:focus-within::after {
+  opacity: 1;
 }
 
 /* ========================================
@@ -251,6 +297,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .form-page__return {
+    transition: none;
+  }
+
+  .form-card::after {
     transition: none;
   }
 }

@@ -1,13 +1,48 @@
-.glow {
-  box-shadow: 0 0 5px var(--color-primary);
+.glow-card {
+  box-shadow:
+    0 20px 80px color-mix(in oklch, var(--background) 70%, transparent),
+    0 0 40px color-mix(in oklch, var(--primary) 8%, transparent);
+}
+
+.glow-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  border-radius: inherit;
+  padding: 1px;
+
+  content: "";
+
+  background: radial-gradient(240px circle at var(--shine-x) var(--shine-y),
+      color-mix(in oklch, var(--primary) 90%, white 10%),
+      transparent 70%);
+
+  opacity: 0;
+
+  transition: opacity var(--motion-fast, 250ms) var(--motion-ease, ease-out);
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.glow-card:hover::after,
+.glow-card:focus-within::after {
+  opacity: 1;
 }
 
 .grid-fade {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(51, 191, 242, 0.08),
-    transparent 70%
-  );
+  background-image: linear-gradient(to bottom,
+      rgba(51, 191, 242, 0.08),
+      transparent 70%);
 }
 
 .text-gradient-blue {

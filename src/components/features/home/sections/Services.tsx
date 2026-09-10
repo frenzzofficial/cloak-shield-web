@@ -65,7 +65,7 @@ export default function Services() {
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {services.map((s) => (
-            <Card key={s.title} className="glow">
+            <Card key={s.title}>
               <span className="mb-4 flex h-9 w-9 items-center justify-center text-brand-400">
                 {s.iconWrap === false ? s.icon : s.icon}
               </span>

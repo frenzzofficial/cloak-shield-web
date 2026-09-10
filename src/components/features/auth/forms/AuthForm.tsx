@@ -126,7 +126,7 @@ const FormLayout = ({ form, children, className }: FormLayoutProps) => {
   const { referTo } = form;
 
   return (
-    <Card className={`form-card ${className ?? ""}`}>
+    <Card className={`form-card sm:min-w-120 ${className ?? ""}`}>
       <header className="form-card__header">
         {form.description && (
           <p className="form-card__description">{form.description}</p>
@@ -193,7 +193,10 @@ const AuthForm = ({
         />
 
         {form.submit && (
-          <Button type="submit" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+          >
             {isLoading ? form.submit.onSubmitLabel : form.submit.label}
           </Button>
         )}

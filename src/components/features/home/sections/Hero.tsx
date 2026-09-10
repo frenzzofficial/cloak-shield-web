@@ -139,7 +139,7 @@ export default function Hero() {
           </div>
 
           {/* Sign-in card mockup */}
-          <Card>
+          <Card className="max-w-75">
             <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-brand-400/60 to-transparent" />{" "}
             <div className="relative z-10 transform-[translateZ(30px)]">
               {" "}

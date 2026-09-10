@@ -23,7 +23,8 @@ const Card = ({ key, children, className }: CardProps) => {
       key={key}
       ref={cardRef}
       className={cn(
-        "relative z-10 w-full max-w-75 overflow-hidden rounded-2xl border border-white/10 bg-[#080d16]/95 p-6 shadow-2xl backdrop-blur-sm transform-3d",
+        "relative z-10 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#080d16]/95 p-6 shadow-2xl backdrop-blur-sm transform-3d",
+        "glow-card",
         className,
       )}
     >
