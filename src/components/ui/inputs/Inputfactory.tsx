@@ -1,4 +1,5 @@
-import "@/styles/utils/input.css";
+import "@/styles/ui/input.css";
+import "@/styles/ui/input-autofill.css";
 import type { Control, UseFormRegister } from "react-hook-form";
 import Checkbox from "@/components/ui/inputs/Checkbox";
 import Select from "@/components/ui/inputs/Select";

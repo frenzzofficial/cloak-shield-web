@@ -1,4 +1,5 @@
 import type React from "react";
+import AuthProvider from "@/components/providers/AuthProvider";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -8,11 +9,13 @@ interface AppClientLayoutProps {
 
 const AppClientLayout = ({ children }: AppClientLayoutProps) => {
   return (
-    <div>
-      <Header />
-      {children}
-      <Footer />
-    </div>
+    <AuthProvider>
+      <div>
+        <Header />
+        {children}
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 };
 

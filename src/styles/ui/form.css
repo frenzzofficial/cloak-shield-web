@@ -205,6 +205,69 @@
 }
 
 /* ========================================
+   Social Sign-In
+   ------------------------------------------
+   Rendered via AuthForm's `footer` slot — sits
+   inside `.form-card__content`, after the submit
+   button, so it inherits the same gap-based
+   vertical rhythm without extra margin hacks.
+   ======================================== */
+
+.social-signin {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-signin__divider {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 0.25rem;
+}
+
+.social-signin__divider::before,
+.social-signin__divider::after {
+  flex: 1 1 0%;
+
+  height: 1px;
+
+  content: "";
+
+  background: color-mix(in oklch, var(--border) 80%, transparent);
+}
+
+.social-signin__divider span {
+  padding: 0 0.75rem;
+
+  color: var(--muted-foreground);
+
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.social-signin__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+}
+
+.social-signin__button {
+  gap: 0.5rem;
+
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 380px) {
+  .social-signin__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
    Responsive
    ======================================== */
 

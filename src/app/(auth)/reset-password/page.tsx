@@ -1,16 +1,16 @@
 import { Suspense } from "react";
-import SignInForm from "./SignInForm";
+import ResetPasswordForm from "./ResetPasswordForm";
 
-const SignInPage = () => {
+const ResetPasswordPage = () => {
   return (
     <main className="form-page">
       <div className="form-page__container">
         <Suspense fallback={null}>
-          <SignInForm />
+          <ResetPasswordForm />
         </Suspense>
       </div>
     </main>
   );
 };
 
-export default SignInPage;
+export default ResetPasswordPage;

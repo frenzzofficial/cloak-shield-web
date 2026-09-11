@@ -1,5 +1,5 @@
 "use client";
-import "@/styles/utils/form.css";
+import "@/styles/ui/form.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   type FieldErrors,
@@ -35,6 +35,10 @@ interface AuthFormProps {
    * without appearing in `form.formInputs`.
    */
   hiddenFields?: Record<string, string>;
+  /** Rendered after the fields, before the submit button — e.g. a "Forgot password?" link. */
+  children?: React.ReactNode;
+  /** Rendered after the submit button — e.g. a divider + social sign-in buttons. */
+  footer?: React.ReactNode;
 }
 
 interface FormLayoutProps {
@@ -174,6 +178,8 @@ const AuthForm = ({
   isLoading = false,
   className,
   hiddenFields,
+  children,
+  footer,
 }: AuthFormProps) => {
   const form = authFormConfig[formKey];
 
@@ -212,11 +218,15 @@ const AuthForm = ({
           errors={errors}
         />
 
+        {children}
+
         {form.submit && (
           <Button type="submit" disabled={isSubmitting}>
             {isLoading ? form.submit.onSubmitLabel : form.submit.label}
           </Button>
         )}
+
+        {footer}
       </FormLayout>
     </form>
   );

@@ -1,6 +1,6 @@
 import LinkImage from "next/link";
 import { ImageLogo, Link } from "@/components/ui";
-import { ArrowRightIcon } from "@/components/ui/icons/icons";
+import NavActions from "./NavActions";
 
 const links = [
   { label: "Home", href: "#", active: true },
@@ -43,15 +43,7 @@ export default function Header() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-4">
-          <Link
-            href="/signin"
-            className="btn-gradient flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[14px] font-medium text-[#02121f] shadow-glow transition-transform hover:scale-[1.03]"
-          >
-            Free Signin
-            <ArrowRightIcon className="h-4 w-4" />
-          </Link>
-        </div>
+        <NavActions />
       </nav>
     </header>
   );

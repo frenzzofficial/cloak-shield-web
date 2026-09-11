@@ -1,4 +1,5 @@
 "use client";
+import "@/styles/ui/card.css";
 import { useCardInteractive } from "@/packages/hooks/gsap/useCardInteractive";
 import { cn } from "@/packages/utils/cn";
 
