@@ -1,4 +1,23 @@
+/* ========================================
+   Glow Card
+   ------------------------------------------
+   Standalone hover/focus border-shine effect
+   owned entirely by Card.tsx (applied via the
+   `glow-card` class on every Card instance).
+   Works on its own wherever Card is used —
+   does NOT depend on `.form-card` or any other
+   consumer setting `--shine-x`/`--shine-y`.
+   `useCardInteractive.ts` updates those two
+   custom properties on pointermove; they default
+   to a centered glow here so hover/focus still
+   shows something even before the first move
+   (or when reduced-motion skips the JS entirely).
+   ======================================== */
+
 .glow-card {
+  --shine-x: 50%;
+  --shine-y: 50%;
+
   box-shadow:
     0 20px 80px color-mix(in oklch, var(--background) 70%, transparent),
     0 0 40px color-mix(in oklch, var(--primary) 8%, transparent);
@@ -14,9 +33,11 @@
 
   content: "";
 
-  background: radial-gradient(240px circle at var(--shine-x) var(--shine-y),
-      color-mix(in oklch, var(--primary) 90%, white 10%),
-      transparent 70%);
+  background: radial-gradient(
+    240px circle at var(--shine-x) var(--shine-y),
+    color-mix(in oklch, var(--primary) 90%, white 10%),
+    transparent 70%
+  );
 
   opacity: 0;
 
@@ -39,10 +60,10 @@
   opacity: 1;
 }
 
-.grid-fade {
-  background-image: linear-gradient(to bottom,
-      rgba(51, 191, 242, 0.08),
-      transparent 70%);
+@media (prefers-reduced-motion: reduce) {
+  .glow-card::after {
+    transition: none;
+  }
 }
 
 .text-gradient-blue {

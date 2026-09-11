@@ -1,3 +1,5 @@
+import type { UserRole } from "@/packages/configs/roles.config";
+
 // BASE ENTITIES
 export interface BaseEntity {
   id: string;
@@ -13,7 +15,11 @@ export interface User extends BaseEntity {
   role?: UserRole;
 }
 
-export type UserRole = "USER" | "ADMIN" | "MODERATOR";
+// Re-exported so existing `import type { UserRole } from "@/types/auth"`
+// call sites keep working. `roles.config.ts` (packages/configs) is the
+// single source of truth — it's also what the runtime `UserRolesValues`
+// enum and env validation use, so the two can no longer drift apart.
+export type { UserRole };
 
 export interface SigninCredentials {
   email: string;
@@ -22,12 +28,6 @@ export interface SigninCredentials {
 
 export interface SignupCredentials extends SigninCredentials {
   fullname: string;
-}
-
-export interface AuthTokens {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
 }
 
 // Matches actual backend shape:

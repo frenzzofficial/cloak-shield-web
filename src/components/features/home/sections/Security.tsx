@@ -72,8 +72,8 @@ export default function Security() {
         <div className="relative mx-auto flex h-70 w-full max-w-105 items-center justify-center">
           <div className="relative h-55 w-55 rounded-full bg-[radial-gradient(circle_at_35%_30%,#3a4a5c,transparent_60%),radial-gradient(circle_at_60%_70%,#0c1420,#05080d)] shadow-[0_0_60px_rgba(51,191,242,0.25)]">
             <div className="absolute inset-0 rounded-full border border-white/10" />
-            <div className="absolute left-1/2 top-1/2 h-75 w-75 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-brand-500/25" />
-            <div className="absolute left-1/2 top-1/2 h-85 w-37.5 -translate-x-1/2 -translate-y-1/2 rotate-20 rounded-[50%] border border-brand-500/15" />
+            <div className="absolute left-1/2 top-1/2 h-75 w-75 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-primary/25" />
+            <div className="absolute left-1/2 top-1/2 h-85 w-37.5 -translate-x-1/2 -translate-y-1/2 rotate-20 rounded-[50%] border border-primary/15" />
             <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_20px_rgba(51,191,242,0.6)]">
               <ImageLogo alt="logo" width={200} height={200} />
             </div>
@@ -82,7 +82,7 @@ export default function Security() {
           {badges.map((b) => (
             <div
               key={b.label}
-              className={`absolute ${b.pos} card-border flex items-center gap-1.5 rounded-lg bg-[#050a12]/95 px-3 py-1.5 text-brand-400 shadow-lg`}
+              className={`absolute ${b.pos} card-border flex items-center gap-1.5 rounded-lg bg-[#050a12]/95 px-3 py-1.5 text-foreground-muted shadow-lg`}
             >
               {b.icon}
               <span className="text-[11.5px] font-medium text-slate-200">
@@ -94,7 +94,7 @@ export default function Security() {
 
         {/* Right content */}
         <div>
-          <p className="eyebrow mb-4 text-[12px] font-medium text-brand-400">
+          <p className="eyebrow mb-4 text-[12px] font-medium text-foreground-muted">
             SECURITY FIRST
           </p>
           <h2 className="text-[30px] font-bold leading-tight text-white sm:text-[34px]">
@@ -112,7 +112,7 @@ export default function Security() {
             <div className="flex flex-col gap-3">
               {leftChecks.map((item) => (
                 <div key={item} className="flex items-center gap-2.5">
-                  <CheckIcon className="h-4 w-4 shrink-0 text-brand-400" />
+                  <CheckIcon className="h-4 w-4 shrink-0 text-foreground-muted" />
                   <span className="text-[13.5px] text-slate-300">{item}</span>
                 </div>
               ))}
@@ -120,7 +120,7 @@ export default function Security() {
             <div className="flex flex-col gap-3">
               {rightChecks.map((item) => (
                 <div key={item} className="flex items-center gap-2.5">
-                  <CheckIcon className="h-4 w-4 shrink-0 text-brand-400" />
+                  <CheckIcon className="h-4 w-4 shrink-0 text-foreground-muted" />
                   <span className="text-[13.5px] text-slate-300">{item}</span>
                 </div>
               ))}

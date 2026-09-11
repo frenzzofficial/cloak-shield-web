@@ -49,7 +49,7 @@ export default function Services() {
       <div className="mx-auto max-w-300 px-6">
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
-            <p className="eyebrow mb-4 text-[12px] font-medium text-brand-400">
+            <p className="eyebrow mb-4 text-[12px] font-medium text-foreground-muted">
               OUR SERVICES
             </p>
             <h2 className="max-w-md text-[30px] font-bold leading-tight text-white sm:text-[34px]">
@@ -66,7 +66,7 @@ export default function Services() {
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {services.map((s) => (
             <Card key={s.title}>
-              <span className="mb-4 flex h-9 w-9 items-center justify-center text-brand-400">
+              <span className="mb-4 flex h-9 w-9 items-center justify-center text-foreground-muted">
                 {s.iconWrap === false ? s.icon : s.icon}
               </span>
               <h3 className="text-[14.5px] font-semibold leading-snug text-white">
@@ -74,7 +74,7 @@ export default function Services() {
               </h3>
               <p
                 className={`mt-2.5 text-[13px] leading-relaxed ${
-                  s.highlight ? "text-brand-400/70" : "text-slate-500"
+                  s.highlight ? "text-foreground-muted/70" : "text-slate-500"
                 }`}
               >
                 {s.desc}

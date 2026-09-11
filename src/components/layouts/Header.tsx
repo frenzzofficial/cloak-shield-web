@@ -1,6 +1,6 @@
 import LinkImage from "next/link";
 import { ImageLogo, Link } from "@/components/ui";
-import { ArrowRightIcon, MoonIcon } from "@/components/ui/icons/icons";
+import { ArrowRightIcon } from "@/components/ui/icons/icons";
 
 const links = [
   { label: "Home", href: "#", active: true },
@@ -44,18 +44,11 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            aria-label="Toggle theme"
-            className="hidden h-9 w-9 items-center justify-center rounded-full text-slate-300 transition-colors hover:text-white sm:flex"
-          >
-            <MoonIcon className="h-4.5 w-4.5" />
-          </button>
           <Link
-            href="#get-started"
+            href="/signin"
             className="btn-gradient flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[14px] font-medium text-[#02121f] shadow-glow transition-transform hover:scale-[1.03]"
           >
-            Get Started
+            Free Signin
             <ArrowRightIcon className="h-4 w-4" />
           </Link>
         </div>

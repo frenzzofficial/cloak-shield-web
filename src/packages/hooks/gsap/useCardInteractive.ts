@@ -90,9 +90,10 @@ export const useCardInteractive = (options: UseCardInteractiveOptions = {}) => {
         quickRotateX(rotateX);
         quickRotateY(rotateY);
 
-        // Drives the cursor-tracked border shine (`.form-card::after` in
-        // form.css) — purely presentational, reuses the pointer position
-        // already computed above for the tilt effect.
+        // Drives the cursor-tracked border shine (`.glow-card::after` in
+        // app.css, applied to every Card instance) — purely
+        // presentational, reuses the pointer position already computed
+        // above for the tilt effect.
         card.style.setProperty("--shine-x", `${percentX * 100}%`);
         card.style.setProperty("--shine-y", `${percentY * 100}%`);
 

@@ -27,6 +27,14 @@ interface AuthFormProps {
   onSubmit?: (data: unknown) => void;
   isLoading?: boolean | undefined;
   className?: string;
+  /**
+   * Values that must be part of the submitted payload but are never
+   * user-editable — e.g. a password-reset `token` read from the URL.
+   * Rendered as `<input type="hidden">` fields registered with
+   * react-hook-form, so they're included in validation/submission
+   * without appearing in `form.formInputs`.
+   */
+  hiddenFields?: Record<string, string>;
 }
 
 interface FormLayoutProps {
@@ -47,10 +55,11 @@ interface FormFieldsProps {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const buildDefaultValues = (
   formKey: AuthSchemaKey,
+  hiddenFields?: Record<string, string>,
 ): Record<string, unknown> => {
   const form = authFormConfig[formKey];
-  const values: Record<string, unknown> = {};
-  const defaultValues = formsConfig.defualtValues;
+  const values: Record<string, unknown> = { ...hiddenFields };
+  const defaultValues = formsConfig.defaultValues;
 
   form.formInputs.forEach((field) => {
     const preset = defaultValues[field.id as keyof typeof defaultValues];
@@ -62,9 +71,12 @@ const buildDefaultValues = (
 };
 
 // ─── useAuthForm ──────────────────────────────────────────────────────────────
-const useAuthForm = (formKey: AuthSchemaKey) => {
+const useAuthForm = (
+  formKey: AuthSchemaKey,
+  hiddenFields?: Record<string, string>,
+) => {
   const schema = authSchemaMap[formKey];
-  const defaultValues = buildDefaultValues(formKey);
+  const defaultValues = buildDefaultValues(formKey, hiddenFields);
   const resolver = zodResolver(
     schema as Parameters<typeof zodResolver>[0],
   ) as unknown as Resolver<Record<string, unknown>>;
@@ -99,6 +111,12 @@ const FormFields = ({ inputs, register, control, errors }: FormFieldsProps) => {
           error: { message: errorMessage },
         };
 
+        if (!renderer && process.env.NODE_ENV === "development") {
+          console.warn(
+            `[AuthForm] No InputFactory renderer registered for input type "${input.type}" (field "${input.id}"). It will not render. Add a case to InputFactory in Inputfactory.tsx.`,
+          );
+        }
+
         return (
           <div key={input.key} className="flex flex-col gap-2 p-1">
             {input.type !== "checkbox" && (
@@ -111,10 +129,6 @@ const FormFields = ({ inputs, register, control, errors }: FormFieldsProps) => {
             )}
 
             {renderer ? renderer(props as unknown as InputFactoryProps) : null}
-
-            {errorMessage && input.type !== "checkbox" && (
-              <span className="text-destructive text-xs">{errorMessage}</span>
-            )}
           </div>
         );
       })}
@@ -159,6 +173,7 @@ const AuthForm = ({
   onSubmit: externalSubmit,
   isLoading = false,
   className,
+  hiddenFields,
 }: AuthFormProps) => {
   const form = authFormConfig[formKey];
 
@@ -167,7 +182,7 @@ const AuthForm = ({
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useAuthForm(formKey);
+  } = useAuthForm(formKey, hiddenFields);
 
   const onSubmit: SubmitHandler<Record<string, unknown>> = (data) => {
     if (externalSubmit) {
@@ -184,6 +199,11 @@ const AuthForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      {hiddenFields &&
+        Object.keys(hiddenFields).map((key) => (
+          <input key={key} type="hidden" {...register(key)} />
+        ))}
+
       <FormLayout form={form} className={className}>
         <FormFields
           inputs={form.formInputs}
@@ -193,10 +213,7 @@ const AuthForm = ({
         />
 
         {form.submit && (
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <Button type="submit" disabled={isSubmitting}>
             {isLoading ? form.submit.onSubmitLabel : form.submit.label}
           </Button>
         )}

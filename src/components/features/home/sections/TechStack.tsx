@@ -103,7 +103,7 @@ export default function TechStack() {
     <section className="border-t border-white/5 bg-[#02040a] py-16">
       <div className="mx-auto flex max-w-300 flex-col items-start justify-between gap-10 px-6 lg:flex-row lg:items-center">
         <div className="max-w-90">
-          <p className="eyebrow mb-4 text-[12px] font-medium text-brand-400">
+          <p className="eyebrow mb-4 text-[12px] font-medium text-foreground-muted">
             BUILT WITH THE BEST
           </p>
           <h2 className="text-[24px] font-bold leading-tight text-white">

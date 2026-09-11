@@ -12,26 +12,23 @@ interface SelectProps<T extends Record<string, unknown>> {
 
 const Select = <T extends Record<string, unknown>>({
   id,
-  label,
   options,
   required = false,
   register,
   errorMessage,
 }: SelectProps<T>) => {
+  // No internal <label> here — FormFields (AuthForm.tsx) already renders
+  // the field label for every non-checkbox input type, keyed to this
+  // `id` via htmlFor. A second label here would render twice.
   return (
     <div className="select-wrapper">
-      {label && (
-        <label htmlFor={id} className="select-label">
-          {label}
-        </label>
-      )}
-
       <select
         id={id}
         {...register(id as Path<T>)}
         required={required}
         className={`select-input ${errorMessage ? "select-error" : ""}`}
         aria-invalid={!!errorMessage}
+        aria-describedby={errorMessage ? `${id}-error` : undefined}
       >
         <option value="">Select...</option>
         {options.map((opt) => (

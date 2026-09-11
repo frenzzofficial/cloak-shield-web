@@ -14,12 +14,12 @@ import {
 
 const trustPoints = [
   {
-    icon: <ShieldCheckIcon className="h-4 w-4 text-brand-400" />,
+    icon: <ShieldCheckIcon className="h-4 w-4 text-foreground-muted" />,
     title: "Secure by Default",
     desc: "Industry best practices",
   },
   {
-    icon: <ShieldCheckIcon className="h-4 w-4 text-brand-400" />,
+    icon: <ShieldCheckIcon className="h-4 w-4 text-foreground-muted" />,
     title: "Easy to Integrate",
     desc: "Works with your stack",
   },
@@ -27,7 +27,7 @@ const trustPoints = [
     icon: (
       <svg
         viewBox="0 0 24 24"
-        className="h-4 w-4 text-brand-400"
+        className="h-4 w-4 text-foreground-muted"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.6"
@@ -80,7 +80,7 @@ export default function Hero() {
             <Link
               variant={"outline"}
               href="/docs"
-              className="rounded-lg border border-brand-500/40 px-6 py-3 text-[14.5px] font-semibold text-brand-400 transition-colors hover:border-brand-500 hover:text-brand-300"
+              className="rounded-lg border border-primary/40 px-6 py-3 text-[14.5px] font-semibold text-foreground-muted transition-colors hover:border-primary hover:text-brand-300"
             >
               View Documentation
             </Link>
@@ -89,7 +89,7 @@ export default function Hero() {
           <div className="mt-10 flex flex-wrap gap-8">
             {trustPoints.map((p) => (
               <div key={p.title} className="flex items-start gap-2.5">
-                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-brand-500/25 bg-brand-500/10">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-primary/25 bg-brand-500/10">
                   {p.icon}
                 </span>
                 <div>
@@ -131,7 +131,7 @@ export default function Hero() {
 
             {/* pedestal */}
             <div className="absolute bottom-2 left-1/2 h-6 w-65 -translate-x-1/2 rounded-full bg-linear-to-b from-brand-500/50 to-transparent blur-sm" />
-            <div className="absolute bottom-0 left-1/2 flex h-9 w-70 -translate-x-1/2 items-center justify-center rounded-full border border-brand-500/30 bg-[#050a12]">
+            <div className="absolute bottom-0 left-1/2 flex h-9 w-70 -translate-x-1/2 items-center justify-center rounded-full border border-primary/30 bg-[#050a12]">
               <span className="eyebrow text-[10px] font-semibold text-slate-300">
                 AUTH&nbsp;&nbsp;·&nbsp;&nbsp;SECURITY&nbsp;&nbsp;·&nbsp;&nbsp;FREEDOM
               </span>
@@ -151,7 +151,7 @@ export default function Hero() {
                 {" "}
                 Sign in to your account{" "}
               </p>{" "}
-              <div className="mt-5 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5 transition-colors hover:border-brand-400/20">
+              <div className="mt-5 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5 transition-colors hover:border-primary/20">
                 {" "}
                 <MailIcon className="h-4 w-4 text-slate-500" />{" "}
                 <span className="text-[13px] text-slate-500">
@@ -159,7 +159,7 @@ export default function Hero() {
                   you@yourapp.com{" "}
                 </span>{" "}
               </div>{" "}
-              <div className="mt-3 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5 transition-colors hover:border-brand-400/20">
+              <div className="mt-3 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/3 px-3.5 py-2.5 transition-colors hover:border-primary/20">
                 {" "}
                 <LockIcon className="h-4 w-4 text-slate-500" />{" "}
                 <span className="flex-1 text-[13px] text-slate-500">
@@ -177,7 +177,7 @@ export default function Hero() {
                 </div>{" "}
                 <NextLink
                   href="#"
-                  className="text-brand-400 transition-colors hover:text-brand-300"
+                  className="text-foreground-muted transition-colors hover:text-brand-300"
                 >
                   {" "}
                   Forgot password?{" "}
@@ -217,7 +217,7 @@ export default function Hero() {
                 Don&apos;t have an account?{" "}
                 <NextLink
                   href="#"
-                  className="text-brand-400 transition-colors hover:text-brand-300"
+                  className="text-foreground-muted transition-colors hover:text-brand-300"
                 >
                   {" "}
                   Create one{" "}

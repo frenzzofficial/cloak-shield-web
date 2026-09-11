@@ -2,11 +2,19 @@ import "@/styles/utils/input.css";
 import type { Control, UseFormRegister } from "react-hook-form";
 import Checkbox from "@/components/ui/inputs/Checkbox";
 import Select from "@/components/ui/inputs/Select";
+import type { InputType } from "@/types/app";
 import Input from "./Input";
+import InputDate from "./InputDate";
 import InputPassword from "./InputPassword";
+import InputPhone from "./InputPhone";
 
-export interface InputFactoryProps extends HTMLInputElement {
+export interface InputFactoryProps {
+  id: string;
+  type: InputType;
   label: string;
+  placeholder: string;
+  required?: boolean;
+  autoComplete?: string;
   options?: { label: string; value: string }[];
   // typed as unknown so callers don't need generics; cast internally
   register: UseFormRegister<Record<string, unknown>>;
@@ -23,6 +31,8 @@ const InputFactory: Record<
     <Input
       id={props.id}
       placeholder={props.placeholder}
+      autoComplete={props.autoComplete}
+      error={props.error?.message}
       {...props.register(props.id)}
     />
   ),
@@ -32,6 +42,8 @@ const InputFactory: Record<
       type="email"
       id={props.id}
       placeholder={props.placeholder}
+      autoComplete={props.autoComplete ?? "email"}
+      error={props.error?.message}
       {...props.register(props.id)}
     />
   ),
@@ -40,6 +52,28 @@ const InputFactory: Record<
     <InputPassword
       id={props.id}
       placeholder={props.placeholder}
+      autoComplete={props.autoComplete}
+      error={props.error?.message}
+      {...props.register(props.id)}
+    />
+  ),
+
+  tel: (props: InputFactoryProps) => (
+    <InputPhone
+      id={props.id}
+      placeholder={props.placeholder}
+      autoComplete={props.autoComplete}
+      error={props.error?.message}
+      {...props.register(props.id)}
+    />
+  ),
+
+  date: (props: InputFactoryProps) => (
+    <InputDate
+      id={props.id}
+      placeholder={props.placeholder}
+      autoComplete={props.autoComplete}
+      error={props.error?.message}
       {...props.register(props.id)}
     />
   ),

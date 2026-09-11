@@ -60,7 +60,7 @@ export default function CTA() {
           </a>
           <a
             href="#docs"
-            className="rounded-lg border border-brand-500/40 px-6 py-3 text-[14.5px] font-semibold text-brand-400 transition-colors hover:border-brand-500 hover:text-brand-300"
+            className="rounded-lg border border-primary/40 px-6 py-3 text-[14.5px] font-semibold text-foreground-muted transition-colors hover:border-primary hover:text-brand-300"
           >
             View Documentation
           </a>

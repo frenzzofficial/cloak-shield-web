@@ -18,6 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${sansFont.variable} ${handFont.variable} ${romanticFont.variable} h-full antialiased`}
     >
       <body className="min-h-full relative flex flex-col dark">

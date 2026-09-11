@@ -348,6 +348,134 @@
 }
 
 /* ========================================
+   Date Input
+   ------------------------------------------
+   The native calendar-picker glyph renders
+   near-black by default, which is invisible
+   against this theme's dark inputs — invert +
+   brighten it so it's actually visible, and
+   recolor on hover/focus to match `--primary`.
+   ======================================== */
+
+.input-date::-webkit-calendar-picker-indicator {
+  padding: 0.25rem;
+
+  border-radius: 0.25rem;
+
+  cursor: pointer;
+  filter: invert(0.7) brightness(1.4);
+
+  transition: filter var(--motion-fast, 200ms) var(--motion-ease, ease-out);
+}
+
+.input-date:hover::-webkit-calendar-picker-indicator,
+.input-date:focus::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) brightness(1.4) sepia(1) saturate(4) hue-rotate(165deg);
+}
+
+.input-date::-webkit-datetime-edit {
+  color: var(--foreground);
+}
+
+.input-date::-webkit-datetime-edit-fields-wrapper {
+  color: var(--foreground);
+}
+
+.input-date:disabled::-webkit-calendar-picker-indicator {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ========================================
+   Select
+   ======================================== */
+
+.select-wrapper {
+  position: relative;
+
+  display: flex;
+  width: 100%;
+}
+
+.select-input {
+  width: 100%;
+  min-width: 0;
+  height: 2.75rem;
+
+  padding: 0.625rem 2.25rem 0.625rem 0.875rem;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: 1px solid var(--input);
+  border-radius: 0.5rem;
+
+  outline: none;
+
+  background:
+    color-mix(in oklch, var(--background) 82%, transparent)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 0.75rem center / 1rem 1rem;
+
+  color: var(--foreground);
+
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  box-shadow: inset 0 1px 0
+    color-mix(in oklch, var(--foreground) 3%, transparent);
+
+  cursor: pointer;
+
+  transition:
+    border-color var(--motion-fast, 200ms) var(--motion-ease, ease-out),
+    box-shadow var(--motion-fast, 200ms) var(--motion-ease, ease-out),
+    background-color var(--motion-fast, 200ms) var(--motion-ease, ease-out);
+}
+
+.select-input:hover:not(:disabled) {
+  border-color: color-mix(in oklch, var(--primary) 25%, var(--input));
+}
+
+.select-input:focus {
+  border-color: var(--ring);
+
+  background-color: color-mix(in oklch, var(--background) 92%, transparent);
+
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 12%, transparent);
+}
+
+.select-input:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.5;
+}
+
+.select-input option {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.select-input.select-error {
+  border-color: var(--destructive);
+}
+
+.select-input.select-error:focus {
+  border-color: var(--destructive);
+
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--destructive) 12%, transparent);
+}
+
+.select-error-message {
+  margin-top: 0.125rem;
+
+  color: var(--destructive);
+
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+/* ========================================
    Form Links
    ======================================== */
 
@@ -391,6 +519,7 @@
   .input-icon-btn,
   .checkbox-box,
   .checkbox-check,
+  .select-input,
   .form-link {
     transition: none;
   }

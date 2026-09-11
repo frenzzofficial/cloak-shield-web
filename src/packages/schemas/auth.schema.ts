@@ -3,23 +3,21 @@ import {
   emailRules,
   fullnameRules,
   passwordRules,
+  phoneRules,
   termsAcceptedRules,
+  withPasswordConfirmation,
 } from "../configs/schema.config";
 
 // SCHEMA
-export const signupSchema = z
-  .object({
+export const signupSchema = withPasswordConfirmation(
+  z.object({
     fullname: fullnameRules,
     email: emailRules,
     password: passwordRules,
     confirmPassword: passwordRules,
     agreeToTerms: termsAcceptedRules,
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "password do not match",
-    path: ["confirmPassword"],
-  })
-  .describe("Registration form");
+  }),
+).describe("Registration form");
 
 export const signinSchema = z.object({
   email: emailRules,
@@ -31,20 +29,25 @@ export const forgetPasswordSchema = z.object({
   email: emailRules,
 });
 
-export const resetPasswordSchema = z.object({
-  token: z.string().min(1, "Token is required"),
-  password: passwordRules,
-  confirmPassword: passwordRules,
-});
+export const resetPasswordSchema = withPasswordConfirmation(
+  z.object({
+    token: z.string().min(1, "Token is required"),
+    password: passwordRules,
+    confirmPassword: passwordRules,
+  }),
+);
 
-export const updatePasswordSchema = z.object({
-  password: passwordRules,
-  confirmPassword: passwordRules,
-});
+export const updatePasswordSchema = withPasswordConfirmation(
+  z.object({
+    password: passwordRules,
+    confirmPassword: passwordRules,
+  }),
+);
 
 export const updateProfileSchema = z.object({
   fullname: fullnameRules,
   email: emailRules,
+  phone: z.union([phoneRules, z.literal("")]).optional(),
 });
 
 export const contactSchema = z.object({
