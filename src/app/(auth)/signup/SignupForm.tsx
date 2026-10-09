@@ -20,7 +20,15 @@ const SignupForm = () => {
 
     startTransition(async () => {
       try {
-        await signUp(credentials);
+        const res = await signUp(credentials);
+
+        if (res.requiresVerification) {
+          // The account exists but is not signed in until the emailed link is opened.
+          toast.success(res.message);
+          router.replace("/signin");
+          return;
+        }
+
         toast.success("Account created. Welcome!");
         router.replace(searchParams.get("next") || "/dashboard");
       } catch (err: unknown) {

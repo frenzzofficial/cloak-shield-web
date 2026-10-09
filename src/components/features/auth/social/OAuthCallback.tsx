@@ -3,90 +3,71 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { getAuthErrorMessage } from "@/packages/errors/auth-error";
-import {
-  exchangeOAuthCode,
-  type OAuthProvider,
-} from "@/packages/services/auth.services";
 
-interface OAuthCallbackProps {
-  provider: OAuthProvider;
-  providerLabel: string;
-}
+// What the backend puts in `?error=` when a provider sign-in does not finish.
+const ERROR_MESSAGES: Record<string, string> = {
+  access_denied: "You cancelled the sign-in.",
+  provider_error: "The provider reported a problem. Please try again.",
+  state_invalid:
+    "That sign-in attempt expired or was already used. Please start again.",
+  exchange_failed: "We couldn't complete the sign-in. Please try again.",
+  token_invalid: "The provider's response couldn't be verified.",
+  email_missing: "The provider did not share an email address.",
+  email_unverified:
+    "The provider hasn't verified that email address, so we can't use it.",
+  account_blocked: "This account can't sign in right now.",
+  provider_conflict:
+    "This email is already linked to a different account with that provider.",
+  server_error: "Something went wrong on our side. Please try again.",
+};
 
-type Status = "exchanging" | "error";
+const DEFAULT_ERROR = "Sign-in failed. Please try again.";
+
+// Only same-site paths: a callback URL must never become an open redirect.
+const safePath = (value: string | null): string =>
+  value?.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
+
+type Status = "finishing" | "error";
 
 /**
- * Renders at `/signin-google` and `/signin-discord` — the
- * `redirect_uri` the backend registers with each provider. The
- * provider lands the browser here with `?code=...` (or `?error=...`
- * if the user denied access), and this exchanges that code for a
- * session via `exchangeOAuthCode` (step 2 of the flow — step 1 is
- * `SocialSignIn.tsx` asking for the provider's consent URL).
+ * Renders at `/auth/callback` — where the backend sends the browser after EVERY provider
+ * attempt (it never answers with JSON, because the browser is mid-redirect):
+ *   ?status=success&redirect=/path   → the session cookies are already set; load the user
+ *   ?status=error&error=<code>       → show a message for that code
  */
-const OAuthCallback = ({ provider, providerLabel }: OAuthCallbackProps) => {
+const OAuthCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { refreshUser } = useAuth();
-  const [status, setStatus] = useState<Status>("exchanging");
+  const [status, setStatus] = useState<Status>("finishing");
   const [errorMessage, setErrorMessage] = useState("");
   const hasRun = useRef(false);
 
-  // Only the first mount's search params matter for a code exchange;
-  // re-running on provider/router/refreshUser identity changes would
-  // just re-trigger the same one-time exchange.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional one-time run on mount only, see comment above
+  // Only the first mount's search params matter; re-running on identity changes would
+  // just repeat the same one-time hand-off.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional one-time run on mount only
   useEffect(() => {
-    // Effects run twice in dev under StrictMode — an auth code can
-    // only be exchanged once, so a second attempt would fail loudly
-    // for no reason. Guard against that specifically (not against
-    // legitimate re-navigation, which remounts this component fresh).
     if (hasRun.current) return;
     hasRun.current = true;
 
-    const providerError = searchParams.get("error");
-    const code = searchParams.get("code");
-
-    if (providerError) {
+    if (searchParams.get("status") !== "success") {
+      const code = searchParams.get("error") ?? "";
       setStatus("error");
-      setErrorMessage(
-        providerError === "access_denied"
-          ? `You cancelled ${providerLabel} sign-in.`
-          : `${providerLabel} sign-in failed.`,
-      );
-      return;
-    }
-
-    if (!code) {
-      setStatus("error");
-      setErrorMessage("Missing authorization code from the redirect.");
+      setErrorMessage(ERROR_MESSAGES[code] ?? DEFAULT_ERROR);
       return;
     }
 
     (async () => {
-      try {
-        await exchangeOAuthCode(provider, code);
-        await refreshUser();
-        router.replace("/dashboard");
-      } catch (err) {
-        setStatus("error");
-        setErrorMessage(
-          getAuthErrorMessage(
-            err,
-            `Couldn't complete ${providerLabel} sign-in.`,
-          ),
-        );
-      }
+      await refreshUser();
+      router.replace(safePath(searchParams.get("redirect")));
     })();
   }, []);
 
   return (
     <div className="form-card sm:min-w-120 max-w-200">
       <div className="form-card__content items-center text-center">
-        {status === "exchanging" ? (
-          <p className="text-sm text-muted-foreground">
-            Completing {providerLabel} sign-in…
-          </p>
+        {status === "finishing" ? (
+          <p className="text-sm text-muted-foreground">Completing sign-in…</p>
         ) : (
           <>
             <p className="text-sm text-destructive">{errorMessage}</p>

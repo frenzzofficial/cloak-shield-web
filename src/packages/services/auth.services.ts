@@ -1,92 +1,91 @@
-import { apiClient } from "@/packages/api/axios.api";
+import { apiClient, apiEnvConfig } from "@/packages/api/axios.api";
 import { AUTH_ENDPOINTS } from "@/packages/configs/endpoints.config";
-import { clearAccessToken, setAccessToken } from "@/packages/utils/token-store";
 import type {
+  AuthProviderInfo,
   AuthResponse,
   ForgotPasswordRequestBody,
+  MeResponse,
+  ProvidersResponse,
   ResetPasswordRequestBody,
   SigninRequestBody,
   SignupRequestBody,
   SuccessResponse,
+  UpdateProfileRequestBody,
   User,
 } from "@/types/auth";
 
 // ============================================================
 // Auth services
 // ------------------------------------------------------------
-// Thin wrappers around `apiClient` — every call here goes through
-// the shared axios instance (packages/api/axios.api.ts), so it
-// automatically respects the internal/external base URL switch and
-// the auth interceptor (token attach + 401 refresh).
+// Thin wrappers around `apiClient`, which handles the CSRF header and 401 → refresh → retry
+// (see packages/api/axios/interceptor.axios.ts). There is no token to store: signing in sets
+// httpOnly cookies, and the browser sends them on every later request.
 //
-// Whichever real backend this eventually talks to, these are the 9
-// contracts it needs to satisfy. Response shapes follow
-// `types/auth.d.ts`, which already documents the expected flat
-// (non-`data`-wrapped) auth response shape.
+// Bodies are built field by field so nothing the backend does not expect (confirmPassword on
+// sign-up, agreeToTerms, ...) is ever sent by accident.
 // ============================================================
 
 export const signIn = async (
   credentials: SigninRequestBody,
 ): Promise<AuthResponse> => {
-  const { data } = await apiClient.post<AuthResponse>(
-    AUTH_ENDPOINTS.signIn,
-    credentials,
-  );
-  if (data.access_token) setAccessToken(data.access_token);
+  const { data } = await apiClient.post<AuthResponse>(AUTH_ENDPOINTS.signIn, {
+    email: credentials.email,
+    password: credentials.password,
+    remember: Boolean(credentials.remember),
+  });
   return data;
 };
 
 export const signUp = async (
   credentials: SignupRequestBody,
 ): Promise<AuthResponse> => {
-  const { data } = await apiClient.post<AuthResponse>(
-    AUTH_ENDPOINTS.signUp,
-    credentials,
-  );
-  if (data.access_token) setAccessToken(data.access_token);
+  const { data } = await apiClient.post<AuthResponse>(AUTH_ENDPOINTS.signUp, {
+    fullname: credentials.fullname,
+    email: credentials.email,
+    password: credentials.password,
+  });
   return data;
 };
 
 export const signOut = async (): Promise<void> => {
-  try {
-    await apiClient.post(AUTH_ENDPOINTS.signOut);
-  } finally {
-    // Always clear the local token, even if the network call failed
-    // (offline, backend down, etc.) — the user asked to sign out, so
-    // the client should behave signed-out regardless.
-    clearAccessToken();
-  }
+  // The server clears the cookies. A failed call (offline, backend down) is not fatal: the
+  // caller still treats the user as signed out locally.
+  await apiClient.post(AUTH_ENDPOINTS.signOut);
 };
 
 /**
- * Attempts a silent refresh using the httpOnly refresh-token cookie.
- * Called once by AuthProvider on mount to restore a session after a
- * full page reload (the in-memory access token doesn't survive one).
- * Resolves `null` — never throws — when there's no valid session, so
- * callers can treat "not logged in" as a normal, expected outcome.
+ * Who is signed in right now — `null` when nobody is. Used once by AuthProvider on mount to
+ * restore a session after a full page reload. A 401 is first retried through the refresh
+ * cookie by the interceptor; `skipAuthRedirect` keeps a signed-out visitor on a public page
+ * instead of bouncing them to /signin.
  */
-export const refreshSession = async (): Promise<{
-  access_token: string;
-} | null> => {
+export const getMe = async (): Promise<User | null> => {
   try {
-    const { data } = await apiClient.post<{ access_token?: string }>(
-      AUTH_ENDPOINTS.refresh,
-    );
-    if (!data.access_token) return null;
-    setAccessToken(data.access_token);
-    return { access_token: data.access_token };
+    const { data } = await apiClient.get<MeResponse>(AUTH_ENDPOINTS.me, {
+      skipAuthRedirect: true,
+    });
+    return data.user;
   } catch {
     return null;
   }
 };
 
-export const getMe = async (): Promise<User> => {
-  const { data } = await apiClient.get<SuccessResponse<User> | User>(
-    AUTH_ENDPOINTS.me,
+export const verifyEmail = async (token: string): Promise<SuccessResponse> => {
+  const { data } = await apiClient.post<SuccessResponse>(
+    AUTH_ENDPOINTS.verifyEmail,
+    { token },
   );
-  // Tolerate either a flat User or a { success, data: User } envelope —
-  // whichever the real backend ends up using.
-  return "data" in data && data.data ? data.data : (data as User);
+  return data;
+};
+
+export const resendVerification = async (
+  email: string,
+): Promise<SuccessResponse> => {
+  const { data } = await apiClient.post<SuccessResponse>(
+    AUTH_ENDPOINTS.resendVerification,
+    { email },
+  );
+  return data;
 };
 
 export const forgotPassword = async (
@@ -94,7 +93,7 @@ export const forgotPassword = async (
 ): Promise<SuccessResponse> => {
   const { data } = await apiClient.post<SuccessResponse>(
     AUTH_ENDPOINTS.forgotPassword,
-    body,
+    { email: body.email },
   );
   return data;
 };
@@ -104,56 +103,61 @@ export const resetPassword = async (
 ): Promise<SuccessResponse> => {
   const { data } = await apiClient.post<SuccessResponse>(
     AUTH_ENDPOINTS.resetPassword,
-    body,
+    {
+      token: body.token,
+      password: body.password,
+      confirmPassword: body.confirmPassword,
+    },
   );
   return data;
 };
 
+/**
+ * Updates the name and/or phone. The email address is NOT changed here: the backend verifies a
+ * new address through its own change-email flow (password + confirmation link).
+ */
 export const updateProfile = async (
-  body: Partial<Pick<User, "fullname" | "email">> & { phone?: string },
+  body: UpdateProfileRequestBody,
 ): Promise<User> => {
-  const { data } = await apiClient.patch<SuccessResponse<User> | User>(
+  const { data } = await apiClient.patch<{ user: User }>(
     AUTH_ENDPOINTS.updateProfile,
-    body,
+    {
+      ...(body.fullname === undefined ? {} : { fullname: body.fullname }),
+      ...(body.phone === undefined ? {} : { phone: body.phone || null }),
+    },
   );
-  return "data" in data && data.data ? data.data : (data as User);
+  return data.user;
 };
 
-// ─── OAuth (Google / Discord) ───────────────────────────────────────────────
+// ─── Sign in with a provider (Google, and Discord once the backend has it) ──
 
-export type OAuthProvider = "google" | "discord";
+/** The sign-in methods the server has switched on, so the UI only draws working buttons. */
+export const getOAuthProviders = async (): Promise<AuthProviderInfo[]> => {
+  const { data } = await apiClient.get<ProvidersResponse>(
+    AUTH_ENDPOINTS.providers,
+  );
+  return data.providers.filter(
+    (provider) => provider.kind === "oauth" && provider.startPath,
+  );
+};
 
 /**
- * Step 1 of the OAuth flow: ask the backend for the provider's
- * consent-screen URL (the backend holds the client_id/secret and
- * builds the redirect_uri, e.g. `${origin}/signin-google`), then hard
- * navigate the browser there. This can't go through a fetch/XHR —
- * it's a real top-level navigation to Google/Discord's own domain.
+ * A provider sign-in is a full-page navigation, not an API call: the browser goes to the
+ * backend, which redirects to Google, which redirects back to the backend, which finally
+ * redirects to this app's /auth/callback page. `next` is where to land afterwards.
  */
-export const redirectToOAuthProvider = async (
-  provider: OAuthProvider,
-): Promise<void> => {
-  const { data } = await apiClient.get<{ url: string }>(
-    AUTH_ENDPOINTS.oauthUrl(provider),
+export const startOAuthSignIn = (
+  provider: AuthProviderInfo,
+  next?: string | null,
+): void => {
+  if (typeof window === "undefined" || !provider.startPath) return;
+
+  const url = new URL(
+    provider.startPath,
+    apiEnvConfig.API_ORIGIN || window.location.origin,
   );
-  if (typeof window !== "undefined" && data.url) {
-    window.location.assign(data.url);
+  if (next?.startsWith("/") && !next.startsWith("//")) {
+    url.searchParams.set("redirect", next);
   }
-};
-
-/**
- * Step 2: the provider redirects back to `/signin-<provider>?code=...`.
- * That page calls this to exchange the code for a session, the same
- * shape as a normal sign-in.
- */
-export const exchangeOAuthCode = async (
-  provider: OAuthProvider,
-  code: string,
-): Promise<AuthResponse> => {
-  const { data } = await apiClient.post<AuthResponse>(
-    AUTH_ENDPOINTS.oauthCallback(provider),
-    { code },
-  );
-  if (data.access_token) setAccessToken(data.access_token);
-  return data;
+  window.location.assign(url.toString());
 };

@@ -37,6 +37,8 @@ const ImageAvatar = ({
         <Image
           src={src}
           alt={alt}
+          width={size}
+          height={size}
           onError={() => setImgError(true)}
           style={{
             width: "100%",

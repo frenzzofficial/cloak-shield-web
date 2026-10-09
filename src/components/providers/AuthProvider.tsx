@@ -9,18 +9,27 @@ import {
   useState,
 } from "react";
 import * as authServices from "@/packages/services/auth.services";
-import { subscribeToAccessToken } from "@/packages/utils/token-store";
-import type { SigninRequestBody, SignupRequestBody, User } from "@/types/auth";
+import { onSessionExpired } from "@/packages/utils/session-events";
+import type {
+  AuthResponse,
+  SigninRequestBody,
+  SignupRequestBody,
+  User,
+} from "@/types/auth";
 
 interface AuthContextValue {
   user: User | null;
   isAuthenticated: boolean;
-  /** True only during the initial silent-refresh hydration on mount. */
+  /** True only during the initial session restore on mount. */
   isLoading: boolean;
   signIn: (credentials: SigninRequestBody) => Promise<User>;
-  signUp: (credentials: SignupRequestBody) => Promise<User>;
+  /**
+   * When the server requires verified emails the account is created but nobody is signed in:
+   * `requiresVerification` is then true and `user` stays null.
+   */
+  signUp: (credentials: SignupRequestBody) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
-  /** Re-fetches the current user (e.g. after updateProfile). */
+  /** Re-fetches the current user (after a provider sign-in or a profile update). */
   refreshUser: () => Promise<void>;
 }
 
@@ -31,13 +40,10 @@ interface AuthProviderProps {
 }
 
 /**
- * Wraps the app once, in AppClientLayout. On mount, attempts a silent
- * refresh using the httpOnly refresh-token cookie (the in-memory
- * access token doesn't survive a page reload) — if that succeeds, it
- * fetches the current user; if not, the app just renders as signed
- * out. The 401 → hard-redirect-to-/signin path (axios/interceptor.axios.ts)
- * is separate and handles session *expiry* mid-session; this effect
- * only handles session *restoration* on load.
+ * Wraps the app once, in AppClientLayout. On mount it asks the backend who is signed in; the
+ * browser sends the httpOnly session cookies by itself, and an expired access cookie is
+ * renewed from the refresh cookie by the axios interceptor. A mid-session expiry is announced
+ * through `onSessionExpired`, so `isAuthenticated` flips immediately.
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
@@ -47,22 +53,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     let cancelled = false;
 
     (async () => {
-      const session = await authServices.refreshSession();
+      const me = await authServices.getMe();
       if (cancelled) return;
-
-      if (!session) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const me = await authServices.getMe();
-        if (!cancelled) setUser(me);
-      } catch {
-        if (!cancelled) setUser(null);
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
+      setUser(me);
+      setIsLoading(false);
     })();
 
     return () => {
@@ -70,15 +64,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  // If the interceptor clears the token after a failed refresh
-  // mid-session (see interceptor.axios.ts), mirror that into user
-  // state too, so components relying on `isAuthenticated` update
-  // immediately rather than only after the next full page load.
-  useEffect(() => {
-    return subscribeToAccessToken((token) => {
-      if (!token) setUser(null);
-    });
-  }, []);
+  useEffect(() => onSessionExpired(() => setUser(null)), []);
 
   const signIn = useCallback(async (credentials: SigninRequestBody) => {
     const res = await authServices.signIn(credentials);
@@ -88,18 +74,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signUp = useCallback(async (credentials: SignupRequestBody) => {
     const res = await authServices.signUp(credentials);
-    setUser(res.user);
-    return res.user;
+    if (!res.requiresVerification) setUser(res.user);
+    return res;
   }, []);
 
   const signOut = useCallback(async () => {
-    await authServices.signOut();
-    setUser(null);
+    try {
+      await authServices.signOut();
+    } finally {
+      setUser(null);
+    }
   }, []);
 
   const refreshUser = useCallback(async () => {
-    const me = await authServices.getMe();
-    setUser(me);
+    setUser(await authServices.getMe());
   }, []);
 
   const value = useMemo<AuthContextValue>(

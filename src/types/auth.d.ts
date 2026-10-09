@@ -1,41 +1,21 @@
 import type { UserRole } from "@/packages/configs/roles.config";
 
-// BASE ENTITIES
-export interface BaseEntity {
+// The user exactly as the backend sends it (GET /v1/auth/email/me, sign-in, sign-up).
+export interface User {
   id: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface User extends BaseEntity {
   email: string;
   fullname: string;
-  avatar_url?: string | null;
-  is_verified?: boolean;
   role?: UserRole;
+  status?: string;
+  /** False for accounts created through a provider (e.g. Google) that never set a password. */
+  hasPassword?: boolean;
+  avatarUrl?: string | null;
 }
 
 // Re-exported so existing `import type { UserRole } from "@/types/auth"`
 // call sites keep working. `roles.config.ts` (packages/configs) is the
-// single source of truth — it's also what the runtime `UserRolesValues`
-// enum and env validation use, so the two can no longer drift apart.
+// single source of truth.
 export type { UserRole };
-
-export interface SigninCredentials {
-  email: string;
-  password: string;
-}
-
-export interface SignupCredentials extends SigninCredentials {
-  fullname: string;
-}
-
-// Matches actual backend shape:
-// { expires_at: 1782414815000, expires_in: 24 }
-export interface Session {
-  expires_at: number;
-  expires_in: number;
-}
 
 export interface SignupRequestBody {
   email: string;
@@ -49,10 +29,6 @@ export interface SigninRequestBody {
   remember: boolean;
 }
 
-export interface RefreshSessionRequestBody {
-  refresh_token?: string;
-}
-
 export interface ForgotPasswordRequestBody {
   email: string;
 }
@@ -60,6 +36,13 @@ export interface ForgotPasswordRequestBody {
 export interface ResetPasswordRequestBody {
   token: string;
   password: string;
+  confirmPassword: string;
+}
+
+export interface UpdateProfileRequestBody {
+  fullname?: string;
+  /** An empty string clears the phone number. */
+  phone?: string;
 }
 
 export interface SuccessResponse<T = unknown> {
@@ -77,20 +60,32 @@ export interface ErrorResponse {
 
 export type ApiResponse<T = unknown> = SuccessResponse<T> | ErrorResponse;
 
-// Matches actual backend shape — user/session are top-level, not nested under data.
-// { success, message, user, session, access_token? }
-export interface AuthResponseData {
-  user: User;
-  session: Session;
-  access_token?: string;
-}
-
-// The auth endpoints return a flat success response — success/message at the
-// top level alongside user and session, not wrapped in a data envelope.
-export type AuthResponse = {
+// Sign-in and sign-up answer with success/message/user at the top level. When the server
+// requires verified emails, sign-up creates the account but does NOT sign the user in:
+// `requiresVerification` is true and the session cookies are not set.
+export interface AuthResponse {
   success: boolean;
   message: string;
   user: User;
-  session: Session;
-  access_token?: string;
-};
+  requiresVerification?: boolean;
+}
+
+export interface MeResponse {
+  success: boolean;
+  message: string;
+  user: User;
+}
+
+/** One entry of GET /v1/auth/providers — the sign-in methods this server offers. */
+export interface AuthProviderInfo {
+  id: string;
+  kind: "password" | "oauth";
+  label: string;
+  /** For "oauth" methods: the path a "Continue with ..." button navigates to. */
+  startPath?: string;
+}
+
+export interface ProvidersResponse {
+  success: boolean;
+  providers: AuthProviderInfo[];
+}

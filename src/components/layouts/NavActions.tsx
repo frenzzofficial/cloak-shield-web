@@ -16,7 +16,7 @@ const NavActions = () => {
     <div className="flex items-center gap-4">
       {isAuthenticated && (
         <ImageAvatar
-          src={user?.avatar_url || "/avatars/default-user.png"}
+          src={user?.avatarUrl || "/avatars/default-user.png"}
           alt={user?.fullname || "avatar"}
           size={64}
           fallbackText={user?.fullname?.[0] || "?"}

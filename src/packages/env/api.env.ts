@@ -11,12 +11,17 @@ import { z } from "zod";
 //     path on the same host). No CORS involved, cookies are
 //     first-party by default.
 //
-//   "external" — cross-origin. The backend is a separate service
-//     (Hono/Express/Fastify etc.) on its own host, reachable via
-//     NEXT_PUBLIC_API_URL. Requests need `withCredentials: true`
-//     and the backend needs CORS configured to allow this origin
-//     with credentials, plus `SameSite=None; Secure` on its
-//     session/refresh cookie.
+//     This is the recommended mode for the Cloak Shield backend: a Next
+//     rewrite (next.config.ts) forwards /api/* to API_PROXY_TARGET, so
+//     the backend's cookies are first-party even though it is hosted
+//     on a different domain.
+//
+//   "external" — cross-origin. The backend is reached directly via
+//     NEXT_PUBLIC_API_URL (must end in /api, e.g. https://host/api).
+//     Requests need `withCredentials: true`, the backend needs CORS
+//     for this origin with credentials, and its cookies need
+//     `SameSite=None; Secure` (AUTH_COOKIE_SAMESITE=none). Browsers
+//     that block third-party cookies will break this mode.
 //
 // `apiClient` (packages/api/axios.api.ts) reads this once at
 // module-init time and configures its `baseURL` accordingly — the
@@ -69,6 +74,12 @@ export const apiEnvConfig = Object.freeze({
       : "/api",
   API_TIMEOUT_MS: parsed.data.NEXT_PUBLIC_API_TIMEOUT_MS,
   IS_EXTERNAL: parsed.data.NEXT_PUBLIC_API_MODE === "external",
+  // Where full-page navigations (Google sign-in) must go: "" means this same origin.
+  API_ORIGIN:
+    parsed.data.NEXT_PUBLIC_API_MODE === "external" &&
+    parsed.data.NEXT_PUBLIC_API_URL
+      ? new URL(parsed.data.NEXT_PUBLIC_API_URL).origin
+      : "",
 });
 
 export type ApiEnvConfig = typeof apiEnvConfig;

@@ -1,14 +1,19 @@
-// Relative to apiClient's baseURL (see axios.api.ts / api.env.ts) — works
-// unchanged in both internal and external API modes.
+// Relative to apiClient's baseURL (see axios.api.ts / api.env.ts), which ends at `/api`.
+// These mirror the backend's versioned routes: /api/v1/auth/email/*, /api/v1/csrf, ...
+const V1 = "/v1";
+const EMAIL = `${V1}/auth/email`;
+
 export const AUTH_ENDPOINTS = {
-  signIn: "/auth/signin",
-  signUp: "/auth/signup",
-  signOut: "/auth/signout",
-  refresh: "/auth/refresh",
-  me: "/auth/me",
-  forgotPassword: "/auth/forgot-password",
-  resetPassword: "/auth/reset-password",
-  updateProfile: "/auth/me",
-  oauthUrl: (provider: string) => `/auth/oauth/${provider}/url`,
-  oauthCallback: (provider: string) => `/auth/oauth/${provider}/callback`,
+  csrf: `${V1}/csrf`,
+  providers: `${V1}/auth/providers`,
+  signIn: `${EMAIL}/signin`,
+  signUp: `${EMAIL}/signup`,
+  signOut: `${EMAIL}/signout`,
+  refresh: `${EMAIL}/refresh`,
+  me: `${EMAIL}/me`,
+  verifyEmail: `${EMAIL}/verify-email`,
+  resendVerification: `${EMAIL}/resend-verification`,
+  forgotPassword: `${EMAIL}/forgot-password`,
+  resetPassword: `${EMAIL}/reset-password`,
+  updateProfile: `${V1}/account/profile`,
 } as const;
