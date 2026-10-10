@@ -18,7 +18,7 @@ const NavActions = () => {
         <ImageAvatar
           src={user?.avatarUrl || "/avatars/default-user.png"}
           alt={user?.fullname || "avatar"}
-          size={64}
+          size={48}
           fallbackText={user?.fullname?.[0] || "?"}
         />
       )}
