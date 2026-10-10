@@ -13,3 +13,4 @@
 // This name must match ACCESS_COOKIE in the backend (src/packages/middlewares/authenticate.ts).
 // ============================================================
 export const ACCESS_COOKIE_NAME = "access_token";
+export const SESSION_COOKIE_NAME = "cs_refresh_token";
