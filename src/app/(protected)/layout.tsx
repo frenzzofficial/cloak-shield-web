@@ -9,12 +9,10 @@ interface LayoutProps<_T> {
 }
 
 /**
- * Client-side backstop for everything under (protected). `middleware.ts`
- * already redirects signed-out visitors away before this ever mounts
- * in the common case (no refresh cookie present) — this handles the
- * gap middleware can't cover: a cookie that exists but turns out to
- * be expired/invalid once actually verified against the backend
- * (AuthProvider's mount-time refreshSession() call).
+ * The signed-out guard for everything under (protected). It waits for AuthProvider's
+ * mount-time `getMe()`, which renews an expired access cookie from the refresh cookie first, and
+ * only then redirects to /signin?next=<this page>. `src/proxy.ts` cannot do this job: it cannot
+ * see the refresh cookie, so it could not tell "signed out" from "access cookie just expired".
  */
 const ProtectedLayout = ({ children }: LayoutProps<"/">) => {
   const router = useRouter();
@@ -22,7 +20,8 @@ const ProtectedLayout = ({ children }: LayoutProps<"/">) => {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace("/signin");
+      const here = `${window.location.pathname}${window.location.search}`;
+      router.replace(`/signin?next=${encodeURIComponent(here)}`);
     }
   }, [isLoading, isAuthenticated, router]);
 

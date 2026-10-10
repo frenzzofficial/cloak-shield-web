@@ -8,6 +8,7 @@ import SocialSignIn from "@/components/features/auth/social/SocialSignIn";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Link } from "@/components/ui";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
+import { safeRedirectPath } from "@/packages/utils/safe-redirect";
 import type { SigninRequestBody } from "@/types/auth";
 
 const SignInForm = () => {
@@ -23,7 +24,7 @@ const SignInForm = () => {
       try {
         await signIn(credentials);
         toast.success("Welcome back!");
-        router.replace(searchParams.get("next") || "/dashboard");
+        router.replace(safeRedirectPath(searchParams.get("next")));
       } catch (err: unknown) {
         toast.error(
           getAuthErrorMessage(err, "Sign-in failed. Please try again."),

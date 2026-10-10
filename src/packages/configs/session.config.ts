@@ -1,15 +1,15 @@
 // ============================================================
-// The httpOnly refresh-token cookie name. Middleware can only check
-// for its *presence* (httpOnly blocks client JS from reading it, not
-// server-side/edge code) — it's a fast, no-network route guard, not a
-// substitute for real auth. The actual session is only ever verified
-// by the backend (via `refreshSession()` / `getMe()`, both real API
-// calls) — this just decides whether to bother rendering a protected
-// page at all, or redirect straight to /signin.
+// The backend's httpOnly access-token cookie (Path `/`, lives as long as the access token,
+// about 15 minutes). The route guard in `src/proxy.ts` can only check its *presence*: it is
+// a fast, no-network hint that the visitor probably has a session, never proof of one. The
+// real check is always the backend, via `getMe()` in AuthProvider.
 //
-// In "internal" API mode, a Next.js Route Handler on this same origin
-// sets this cookie. In "external" mode, the separate backend sets it
-// with `SameSite=None; Secure` — this name must match whatever the
-// backend actually issues.
+// The refresh cookie is deliberately NOT used here: it is scoped to the auth API path, so the
+// browser never sends it with page requests. That is also why a missing access cookie does
+// not prove the visitor is signed out (the refresh cookie may still renew it), and why the
+// guard only redirects signed-IN visitors away from the auth pages and leaves signed-out
+// protection to the client layout, which refreshes first.
+//
+// This name must match ACCESS_COOKIE in the backend (src/packages/middlewares/authenticate.ts).
 // ============================================================
-export const SESSION_COOKIE_NAME = "cs_refresh_token";
+export const ACCESS_COOKIE_NAME = "access_token";

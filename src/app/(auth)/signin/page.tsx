@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import GuestOnly from "@/components/features/auth/guards/GuestOnly";
 import SignInForm from "./SignInForm";
 
 const SignInPage = () => {
@@ -6,7 +7,9 @@ const SignInPage = () => {
     <main className="form-page">
       <div className="form-page__container">
         <Suspense fallback={null}>
-          <SignInForm />
+          <GuestOnly>
+            <SignInForm />
+          </GuestOnly>
         </Suspense>
       </div>
     </main>

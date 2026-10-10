@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { safeRedirectPath } from "@/packages/utils/safe-redirect";
 
 // What the backend puts in `?error=` when a provider sign-in does not finish.
 const ERROR_MESSAGES: Record<string, string> = {
@@ -22,10 +23,6 @@ const ERROR_MESSAGES: Record<string, string> = {
 };
 
 const DEFAULT_ERROR = "Sign-in failed. Please try again.";
-
-// Only same-site paths: a callback URL must never become an open redirect.
-const safePath = (value: string | null): string =>
-  value?.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
 
 type Status = "finishing" | "error";
 
@@ -59,7 +56,7 @@ const OAuthCallback = () => {
 
     (async () => {
       await refreshUser();
-      router.replace(safePath(searchParams.get("redirect")));
+      router.replace(safeRedirectPath(searchParams.get("redirect")));
     })();
   }, []);
 

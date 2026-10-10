@@ -7,6 +7,7 @@ import AuthForm from "@/components/features/auth/forms/AuthForm";
 import SocialSignIn from "@/components/features/auth/social/SocialSignIn";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
+import { safeRedirectPath } from "@/packages/utils/safe-redirect";
 import type { SignupRequestBody } from "@/types/auth";
 
 const SignupForm = () => {
@@ -30,7 +31,7 @@ const SignupForm = () => {
         }
 
         toast.success("Account created. Welcome!");
-        router.replace(searchParams.get("next") || "/dashboard");
+        router.replace(safeRedirectPath(searchParams.get("next")));
       } catch (err: unknown) {
         toast.error(
           getAuthErrorMessage(err, "Sign-up failed. Please try again."),
