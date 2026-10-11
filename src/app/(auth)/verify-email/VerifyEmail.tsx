@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Loader from "@/components/ui/loader/Loader";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { verifyEmail } from "@/packages/services/auth.services";
 
@@ -43,12 +44,13 @@ const VerifyEmail = () => {
       );
   }, [token]);
 
+  if (state.kind === "verifying") {
+    return <Loader fullscreen label="Verifying your email" />;
+  }
+
   return (
     <div className="form-card sm:min-w-120 max-w-200">
       <div className="form-card__content items-center text-center">
-        {state.kind === "verifying" && (
-          <p className="text-sm text-muted-foreground">Verifying your email…</p>
-        )}
         {state.kind === "verified" && (
           <>
             <p className="text-sm">Your email is verified. You can sign in.</p>

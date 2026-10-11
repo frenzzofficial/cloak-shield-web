@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
+import Loader from "@/components/ui/loader/Loader";
 import { safeRedirectPath } from "@/packages/utils/safe-redirect";
 
 // What the backend puts in `?error=` when a provider sign-in does not finish.
@@ -60,19 +61,17 @@ const OAuthCallback = () => {
     })();
   }, []);
 
+  if (status === "finishing") {
+    return <Loader fullscreen label="Completing sign-in" />;
+  }
+
   return (
     <div className="form-card sm:min-w-120 max-w-200">
       <div className="form-card__content items-center text-center">
-        {status === "finishing" ? (
-          <p className="text-sm text-muted-foreground">Completing sign-in…</p>
-        ) : (
-          <>
-            <p className="text-sm text-destructive">{errorMessage}</p>
-            <a href="/signin" className="text-sm underline">
-              Back to sign in
-            </a>
-          </>
-        )}
+        <p className="text-sm text-destructive">{errorMessage}</p>
+        <a href="/signin" className="text-sm underline">
+          Back to sign in
+        </a>
       </div>
     </div>
   );

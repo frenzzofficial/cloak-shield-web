@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
+import Loader from "@/components/ui/loader/Loader";
 
 interface LayoutProps<_T> {
   children: React.ReactNode;
@@ -26,11 +27,7 @@ const ProtectedLayout = ({ children }: LayoutProps<"/">) => {
   }, [isLoading, isAuthenticated, router]);
 
   if (isLoading || !isAuthenticated) {
-    return (
-      <div className="flex min-h-svh items-center justify-center">
-        <p className="text-sm text-muted-foreground">Loading…</p>
-      </div>
-    );
+    return <Loader fullscreen label="Verifying session" />;
   }
 
   return <>{children}</>;

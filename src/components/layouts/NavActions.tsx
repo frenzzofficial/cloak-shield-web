@@ -3,13 +3,13 @@ import { ArrowRightIcon } from "@/components/ui/icons/icons";
 import { useAuth } from "../providers/AuthProvider";
 import { Link } from "../ui";
 import ImageAvatar from "../ui/image/ImageAvatar";
-import Loading from "./Loading";
+import Loader from "../ui/loader/Loader";
 
 const NavActions = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
-    return <Loading />;
+    return <Loader compact />;
   }
 
   return (
