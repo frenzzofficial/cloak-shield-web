@@ -3,7 +3,6 @@ import {
   emailRules,
   fullnameRules,
   passwordRules,
-  phoneRules,
   termsAcceptedRules,
   withPasswordConfirmation,
 } from "../configs/schema.config";
@@ -43,12 +42,6 @@ export const updatePasswordSchema = withPasswordConfirmation(
     confirmPassword: passwordRules,
   }),
 );
-
-export const updateProfileSchema = z.object({
-  fullname: fullnameRules,
-  email: emailRules,
-  phone: z.union([phoneRules, z.literal("")]).optional(),
-});
 
 export const contactSchema = z.object({
   fullname: fullnameRules,

@@ -527,3 +527,14 @@
     transform: translateY(-50%);
   }
 }
+
+/* ========================================
+   Textarea (shares .input; only the height rules differ)
+   ======================================== */
+
+.input.input-textarea {
+  height: auto;
+  min-height: 6rem;
+
+  resize: vertical;
+}

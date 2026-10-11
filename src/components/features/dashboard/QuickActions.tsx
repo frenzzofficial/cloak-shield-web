@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import ChangePasswordModal from "@/components/features/account/ChangePasswordModal";
+import ChangePasswordModal from "@/components/features/profile/ChangePasswordModal";
 import { useNavigationFeature } from "@/components/features/navigation/NavigationProvider";
 import {
   ChevronRightIcon,

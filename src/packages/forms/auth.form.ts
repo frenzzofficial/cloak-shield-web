@@ -1,49 +1,23 @@
 import type z from "zod";
-import type { InputType } from "../../types/app";
-
+import type { FormListType } from "../../types/form";
 import {
   forgetPasswordSchema,
   resetPasswordSchema,
   signinSchema,
   signupSchema,
-  updateProfileSchema,
 } from "../schemas/auth.schema";
+import { createFormRegistry } from "../utils/create-form-registry";
 
-//  TYPES
-export interface FormInputType {
-  key: string;
-  id: string;
-  label: string;
-  type: InputType;
-  placeholder: string;
-  autoComplete?: string;
-  options?: { label: string; value: string }[];
-  required: boolean;
-  errorMessage: string;
-}
-
-export interface ReferToType {
-  href: string;
-  label: string;
-}
-
-export interface SubmitType {
-  label: string;
-  onSubmitLabel: string;
-}
-
-export interface FormListType {
-  key: string;
-  title: string;
-  description: string;
-  icon?: string;
-  submit?: SubmitType;
-  referTo?: ReferToType;
-  formInputs: FormInputType[];
-}
+export type {
+  FormInputType,
+  FormListType,
+  ReferToType,
+  SubmitType,
+} from "../../types/form";
 
 //  CONFIG (OBJECT MAP ✅)
-export const authFormConfig: Record<string, FormListType> = {
+export const authFormConfig: Record<keyof typeof authSchemaMap, FormListType> =
+{
   SIGNIN: {
     key: "SIGNIN",
     title: "Sign In",
@@ -219,53 +193,6 @@ export const authFormConfig: Record<string, FormListType> = {
       },
     ],
   },
-
-  UPDATE_PROFILE: {
-    key: "UPDATE_PROFILE",
-    title: "Update Profile",
-    description: "Update your personal information",
-    icon: "UserCog",
-    submit: {
-      label: "Update",
-      onSubmitLabel: "Updating...",
-    },
-    referTo: {
-      href: "signin",
-      label: "Back to login?",
-    },
-    formInputs: [
-      {
-        key: "UPDATE-FULLNAME",
-        id: "fullname",
-        label: "Full Name",
-        type: "text",
-        placeholder: "Enter your full name",
-        autoComplete: "name",
-        required: true,
-        errorMessage: "Full Name is required",
-      },
-      {
-        key: "UPDATE-EMAIL",
-        id: "email",
-        label: "Email",
-        type: "email",
-        placeholder: "Enter your email",
-        autoComplete: "email",
-        required: true,
-        errorMessage: "Email is required",
-      },
-      {
-        key: "UPDATE-PHONE",
-        id: "phone",
-        label: "Phone Number",
-        type: "tel",
-        placeholder: "+1 555 000 1234",
-        autoComplete: "tel",
-        required: false,
-        errorMessage: "Enter a valid phone number",
-      },
-    ],
-  },
 };
 
 //  TYPESAFE KEY
@@ -277,7 +204,6 @@ export const authSchemaMap = {
   SIGNUP: signupSchema,
   FORGOT_PASSWORD: forgetPasswordSchema,
   RESET_PASSWORD: resetPasswordSchema,
-  UPDATE_PROFILE: updateProfileSchema,
 } as const;
 
 export type AuthSchemaMap = typeof authSchemaMap;
@@ -285,3 +211,5 @@ export type AuthSchemaMap = typeof authSchemaMap;
 export type AuthSchemaKey = keyof AuthSchemaMap;
 
 export type AuthSchemaType<K extends AuthSchemaKey> = z.infer<AuthSchemaMap[K]>;
+
+export const authForms = createFormRegistry(authFormConfig, authSchemaMap);

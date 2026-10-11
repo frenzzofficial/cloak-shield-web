@@ -77,6 +77,13 @@ export const schemaMessages = {
 
   // URL
   urlInvalid: "Invalid URL",
+  httpsUrlInvalid: "Enter a full link starting with https://",
+
+  // BIO
+  bioTooLong: "Bio must not exceed 500 characters",
+
+  // GENDER
+  genderInvalid: "Choose one of the listed options",
 
   // PHONE
   phoneInvalid: "Invalid phone number format",
@@ -194,11 +201,39 @@ export const withPasswordConfirmation = <
   T extends { password: string; confirmPassword: string },
 >(
   schema: z.ZodType<T>,
+) => withFieldsMatch(schema, "password", "confirmPassword");
+
+/**
+ * Same check for any pair of fields, for forms whose password field is not called `password`
+ * (change password: `newPassword` + `confirmPassword`). The error lands on the confirm field.
+ *
+ *   withFieldsMatch(z.object({ newPassword: ..., confirmPassword: ... }),
+ *                   "newPassword", "confirmPassword")
+ */
+export const withFieldsMatch = <
+  F extends string,
+  C extends string,
+  T extends Record<F | C, string>,
+>(
+  schema: z.ZodType<T>,
+  field: F,
+  confirmField: C,
+  message: string = schemaMessages.passwordMismatch,
 ) =>
-  schema.refine((data) => data.password === data.confirmPassword, {
-    message: schemaMessages.passwordMismatch,
-    path: ["confirmPassword"],
-  });
+  schema.refine(
+    (data) => {
+      const values: Record<string, string> = data;
+      return values[field] === values[confirmField];
+    },
+    { message, path: [confirmField] },
+  );
+
+/**
+ * A field the user may leave blank. Forms send "" for an empty input, so "" must be valid
+ * (it means "nothing" / "clear this"), while anything typed still has to satisfy `rules`.
+ */
+export const optionalRules = <T extends z.ZodType>(rules: T) =>
+  z.union([rules, z.literal("")]).optional();
 
 // TERMS and conditions rules
 export const termsAcceptedRules = z
@@ -269,6 +304,18 @@ export const phoneRules = trimString()
 // URL rules
 export const urlRules = z.url(schemaMessages.urlInvalid).describe("URL");
 
+// https-only URL rules: profile links are rendered as links, so `javascript:` and `data:`
+// must never get in (the backend enforces the same).
+export const httpsUrlRules = z
+  .url({ protocol: /^https$/, message: schemaMessages.httpsUrlInvalid })
+  .max(2048, schemaMessages.urlInvalid)
+  .describe("https URL");
+
+// BIO rules
+export const bioRules = trimString()
+  .max(500, schemaMessages.bioTooLong)
+  .describe("Short biography");
+
 // MESSAGE rules
 export const messageRules = trimString()
   .min(5, schemaMessages.messageTooShort)
@@ -330,6 +377,27 @@ export const createBirthdateRules = (minimumAge = 13) =>
       message: minAgeMessage(minimumAge),
     })
     .describe(`Birthdate (minimum age ${minimumAge})`);
+
+/**
+ * Birth date as a form sends it: a "YYYY-MM-DD" string that is not in the future. Unlike
+ * `createBirthdateRules` it stays a string, which is what a date input and the API both use.
+ */
+export const birthDateStringRules = dateStringRules
+  .refine((value) => value <= new Date().toISOString().slice(0, 10), {
+    message: schemaMessages.birthdateFuture,
+  })
+  .describe("Birth date (YYYY-MM-DD, not in the future)");
+
+// GENDER rules (the values the API stores)
+export const GENDER_VALUES = [
+  "MALE",
+  "FEMALE",
+  "OTHER",
+  "PREFER_NOT_TO_SAY",
+] as const;
+export const genderRules = z
+  .enum(GENDER_VALUES, { message: schemaMessages.genderInvalid })
+  .describe("Gender");
 
 /**
  * Date range object schema factory — ensures endDate is on/after

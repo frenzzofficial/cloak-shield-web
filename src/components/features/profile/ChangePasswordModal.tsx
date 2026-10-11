@@ -15,7 +15,7 @@ import {
   PASSWORD_MAX_LENGTH,
   unmetPasswordRules,
 } from "@/packages/utils/password-rules";
-import PasswordStrength from "./PasswordStrength";
+import PasswordStrength from "../../layouts/PasswordStrength";
 
 const TITLE_ID = "change-password-title";
 
