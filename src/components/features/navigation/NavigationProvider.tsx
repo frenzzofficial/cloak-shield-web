@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-
+import { TRANSIENT_PREFIX } from "@/packages/configs/modal.config";
 import {
   getLocalStorageSet,
   setLocalStorageSet,
@@ -28,6 +28,14 @@ type NavigationContextValue = {
 // Constants
 const STORAGE_KEY = "app-navigation-state";
 
+// Ids starting with this are dialogs, not navigation state. They are never saved: a dialog
+// that reopened after a reload (or for the next person on a shared browser) would be a bug,
+// and for something like "change password" a security one. Sidebars and drawers keep their id
+// plain so the user's layout is still remembered.
+
+const persistable = (ids: ReadonlySet<string>): Set<string> =>
+  new Set([...ids].filter((id) => !id.startsWith(TRANSIENT_PREFIX)));
+
 // Context
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
@@ -39,7 +47,7 @@ type NavigationProviderProps = {
 export function NavigationProvider({ children }: NavigationProviderProps) {
   // Restore State Once
   const [openIds, setOpenIds] = useState<Set<string>>(() =>
-    getLocalStorageSet(STORAGE_KEY),
+    persistable(getLocalStorageSet(STORAGE_KEY)),
   );
 
   // Skip Initial Persist
@@ -53,7 +61,7 @@ export function NavigationProvider({ children }: NavigationProviderProps) {
       return;
     }
 
-    setLocalStorageSet(STORAGE_KEY, openIds);
+    setLocalStorageSet(STORAGE_KEY, persistable(openIds));
   }, [openIds]);
 
   // Helpers

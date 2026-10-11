@@ -39,6 +39,20 @@ export interface ResetPasswordRequestBody {
   confirmPassword: string;
 }
 
+export interface ChangePasswordRequestBody {
+  /** Left out for accounts that have no password yet (created through a provider). */
+  currentPassword?: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+  /** How many OTHER devices were signed out by the change. */
+  revokedSessions: number;
+}
+
 export interface UpdateProfileRequestBody {
   fullname?: string;
   /** An empty string clears the phone number. */

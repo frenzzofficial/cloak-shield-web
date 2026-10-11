@@ -1,6 +1,6 @@
 "use client";
 
-import { type CSSProperties, type ReactNode, useEffect } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useDrawerEscape } from "@/packages/hooks/useDrawer";
 import { useNavigationFeature } from "../../NavigationProvider";
@@ -14,7 +14,20 @@ type CenteredModalProps = {
   closeOnOverlay?: boolean;
   /** Max width of the modal panel. Defaults to "32rem". */
   maxWidth?: CSSProperties["maxWidth"];
+  /**
+   * No white surface of its own: the children draw their own (e.g. a `Card`). The panel then
+   * never clips them, so tilt and glow effects reach past the edges, and tall content scrolls
+   * inside the viewport instead.
+   */
+  bare?: boolean;
+  /** Accessible name for the dialog (use when the children have no visible heading). */
+  label?: string;
+  /** Id of the element that names the dialog, when it has a visible heading. */
+  labelledBy?: string;
 };
+
+const FOCUSABLE =
+  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -34,9 +47,13 @@ export default function CenteredModal({
   children,
   closeOnOverlay = true,
   maxWidth = "32rem",
+  bare = false,
+  label,
+  labelledBy,
 }: CenteredModalProps) {
   const { isOpen, close } = useNavigationFeature();
   const open = isOpen(modalId);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useDrawerEscape(() => close(modalId), open);
 
@@ -50,10 +67,59 @@ export default function CenteredModal({
     };
   }, [open]);
 
+  // Keyboard focus: move into the dialog, keep Tab inside it, and give focus back to whatever
+  // opened it. Without this, Tab walks into the page hidden behind the backdrop.
+  useEffect(() => {
+    if (!open) return;
+    const opener = document.activeElement as HTMLElement | null;
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    const focusables = () =>
+      [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (element) => element.offsetParent !== null,
+      );
+    (
+      panel.querySelector<HTMLElement>("[data-autofocus]") ??
+      focusables()[0] ??
+      panel
+    ).focus();
+
+    const trap = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const items = focusables();
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!first || !last) {
+        event.preventDefault();
+        return;
+      }
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", trap);
+    return () => {
+      document.removeEventListener("keydown", trap);
+      opener?.focus?.();
+    };
+  }, [open]);
+
   if (!open) return null;
 
   return createPortal(
-    <div style={styles.root} role="dialog" aria-modal="true">
+    <div
+      style={styles.root}
+      role="dialog"
+      aria-modal="true"
+      aria-label={labelledBy ? undefined : label}
+      aria-labelledby={labelledBy}
+    >
       {/* Backdrop */}
       <div
         style={styles.overlay}
@@ -62,8 +128,24 @@ export default function CenteredModal({
       />
 
       {/* Panel wrapper — flex center */}
-      <div style={styles.layout}>
-        <div style={styles.panel(maxWidth)}>{children}</div>
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: pointer-only backdrop dismissal; Esc is the keyboard path */}
+      <div
+        style={bare ? styles.layoutScroll : styles.layout}
+        onMouseDown={
+          bare && closeOnOverlay
+            ? (event) => {
+                if (event.target === event.currentTarget) close(modalId);
+              }
+            : undefined
+        }
+      >
+        <div
+          ref={panelRef}
+          tabIndex={-1}
+          style={bare ? styles.panelBare(maxWidth) : styles.panel(maxWidth)}
+        >
+          {children}
+        </div>
       </div>
 
       <style>{KEYFRAMES}</style>
@@ -98,6 +180,25 @@ const styles = {
     padding: "16px",
     pointerEvents: "none",
   } satisfies CSSProperties,
+
+  // Bare: the layer itself scrolls (so nothing the children do is clipped), and `margin: auto`
+  // on the panel centres it when it fits and lets it scroll from the top when it does not.
+  layoutScroll: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    padding: "24px 16px",
+    overflowY: "auto",
+  } satisfies CSSProperties,
+
+  panelBare: (maxWidth: CSSProperties["maxWidth"]): CSSProperties => ({
+    position: "relative",
+    width: "100%",
+    maxWidth,
+    margin: "auto",
+    outline: "none",
+    animation: "centeredModalIn 0.22s cubic-bezier(0.34,1.56,0.64,1)",
+  }),
 
   panel: (maxWidth: CSSProperties["maxWidth"]): CSSProperties => ({
     position: "relative",

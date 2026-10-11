@@ -3,6 +3,8 @@ import { AUTH_ENDPOINTS } from "@/packages/configs/endpoints.config";
 import type {
   AuthProviderInfo,
   AuthResponse,
+  ChangePasswordRequestBody,
+  ChangePasswordResponse,
   ForgotPasswordRequestBody,
   MeResponse,
   ProvidersResponse,
@@ -160,4 +162,25 @@ export const startOAuthSignIn = (
     url.searchParams.set("redirect", next);
   }
   window.location.assign(url.toString());
+};
+
+/**
+ * Signed-in password change. The backend checks the current password (accounts without one,
+ * such as Google-only accounts, send none and need a recent sign-in instead), ends every OTHER
+ * session, and emails a notice. This device stays signed in.
+ */
+export const changePassword = async (
+  body: ChangePasswordRequestBody,
+): Promise<ChangePasswordResponse> => {
+  const { data } = await apiClient.post<ChangePasswordResponse>(
+    AUTH_ENDPOINTS.changePassword,
+    {
+      ...(body.currentPassword
+        ? { currentPassword: body.currentPassword }
+        : {}),
+      newPassword: body.newPassword,
+      confirmPassword: body.confirmPassword,
+    },
+  );
+  return data;
 };

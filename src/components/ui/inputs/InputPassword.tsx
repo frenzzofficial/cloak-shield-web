@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import "@/styles/ui/input.css";
+import "@/styles/ui/input-autofill.css";
 import EyeClose from "../svg/EyeClose";
 import EyeOpen from "../svg/EyeOpen";
 

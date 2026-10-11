@@ -15,5 +15,6 @@ export const AUTH_ENDPOINTS = {
   resendVerification: `${EMAIL}/resend-verification`,
   forgotPassword: `${EMAIL}/forgot-password`,
   resetPassword: `${EMAIL}/reset-password`,
+  changePassword: `${EMAIL}/change-password`,
   updateProfile: `${V1}/account/profile`,
 } as const;
