@@ -8,6 +8,7 @@ import {
   profileSchemaMap,
 } from "@/packages/forms/profile.form";
 import type { FormValues } from "@/packages/utils/create-form-registry";
+import type { FormHelpers } from "@/types/form";
 
 /** The values a given profile form submits, e.g. ProfileFormValues<"CHANGE_EMAIL">. */
 export type ProfileFormValues<K extends ProfileFormKey> = FormValues<
@@ -15,15 +16,22 @@ export type ProfileFormValues<K extends ProfileFormKey> = FormValues<
   K
 >;
 
-interface ProfileFormProps<K extends ProfileFormKey> extends Omit<
-  DynamicFormProps,
-  "form" | "schema" | "onSubmit" | "initialValues" | "presetDefaults"
-> {
+interface ProfileFormProps<K extends ProfileFormKey>
+  extends Omit<
+    DynamicFormProps,
+    "form" | "schema" | "onSubmit" | "initialValues" | "presetDefaults"
+  > {
   formKey: K;
   /** The user's current values; the form starts from them. Only keys of this form apply. */
   initialValues?: Partial<ProfileFormValues<K>>;
-  /** Called with the validated values, already typed for this form. */
-  onSubmit?: (values: ProfileFormValues<K>) => void;
+  /**
+   * Called with the validated values, already typed for this form. May be async; use `helpers`
+   * to show a server error under a field or above the buttons.
+   */
+  onSubmit?: (
+    values: ProfileFormValues<K>,
+    helpers: FormHelpers,
+  ) => void | Promise<void>;
 }
 
 /**
@@ -41,7 +49,10 @@ function ProfileForm<K extends ProfileFormKey>({
       form={profileFormConfig[formKey]}
       schema={profileSchemaMap[formKey]}
       initialValues={initialValues}
-      onSubmit={onSubmit && ((data) => onSubmit(data as ProfileFormValues<K>))}
+      onSubmit={
+        onSubmit &&
+        ((data, helpers) => onSubmit(data as ProfileFormValues<K>, helpers))
+      }
       {...rest}
     />
   );

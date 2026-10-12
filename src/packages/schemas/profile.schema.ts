@@ -55,6 +55,19 @@ export const changePasswordSchema = withFieldsMatch(
   })
   .describe("Change password form");
 
+/**
+ * Mirrors the same endpoint for accounts that have NO password yet (created through Google):
+ * there is no current password to ask for, so this form SETS the first one.
+ */
+export const setPasswordSchema = withFieldsMatch(
+  z.object({
+    newPassword: passwordRules,
+    confirmPassword: confirmPasswordRules,
+  }),
+  "newPassword",
+  "confirmPassword",
+).describe("Set password form");
+
 /** Mirrors POST /auth/email/change-email (a confirmation link goes to the new address). */
 export const changeEmailSchema = z.object({
   newEmail: emailRules,
@@ -76,5 +89,6 @@ export const updatePreferencesSchema = z.object({
 // SCHEMA OUTPUT
 export type UpdateProfileValues = z.infer<typeof updateProfileSchema>;
 export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
+export type SetPasswordValues = z.infer<typeof setPasswordSchema>;
 export type ChangeEmailValues = z.infer<typeof changeEmailSchema>;
 export type UpdatePreferencesValues = z.infer<typeof updatePreferencesSchema>;

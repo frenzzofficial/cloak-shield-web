@@ -21,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       className={`${sansFont.variable} ${handFont.variable} ${romanticFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full relative flex flex-col dark">
+      <body className="min-h-full relative flex flex-col dark bg-background text-foreground">
         <AppClientLayout>{children}</AppClientLayout>
       </body>
     </html>

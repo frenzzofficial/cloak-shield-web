@@ -18,11 +18,21 @@ export interface InputFactoryProps {
   required?: boolean;
   autoComplete?: string;
   options?: { label: string; value: string }[];
+  maxLength?: number;
+  autoFocus?: boolean;
+  describedBy?: string;
   // typed as unknown so callers don't need generics; cast internally
   register: UseFormRegister<Record<string, unknown>>;
   control: Control<Record<string, unknown>>;
   error?: { message: string };
 }
+
+/** The optional attributes every text-like field can take from its config. */
+const extra = (props: InputFactoryProps) => ({
+  ...(props.maxLength ? { maxLength: props.maxLength } : {}),
+  ...(props.autoFocus ? { "data-autofocus": true } : {}),
+  ...(props.describedBy ? { "aria-describedby": props.describedBy } : {}),
+});
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
 const InputFactory: Record<
@@ -35,6 +45,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),
@@ -46,6 +57,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete ?? "email"}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),
@@ -57,6 +69,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete ?? "url"}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),
@@ -67,6 +80,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),
@@ -77,6 +91,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),
@@ -87,6 +102,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),
@@ -97,6 +113,7 @@ const InputFactory: Record<
       placeholder={props.placeholder}
       autoComplete={props.autoComplete}
       error={props.error?.message}
+      {...extra(props)}
       {...props.register(props.id)}
     />
   ),

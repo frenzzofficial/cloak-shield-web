@@ -51,7 +51,7 @@ export const schemaMessages = {
   // PASSWORD
   passwordRequired: "Password is required",
   passwordTooShort: "Password must be at least 8 characters long",
-  passwordTooLong: "Password must not exceed 32 characters",
+  passwordTooLong: "Password must not exceed 128 characters",
   passwordUpper: "Password must contain at least one uppercase letter",
   passwordLower: "Password must contain at least one lowercase letter",
   passwordNumber: "Password must contain at least one number",
@@ -174,7 +174,7 @@ export const usernameRules = trimString()
 // PASSWORD rules
 export const passwordRules = trimString()
   .min(8, schemaMessages.passwordTooShort)
-  .max(32, schemaMessages.passwordTooLong)
+  .max(128, schemaMessages.passwordTooLong)
   .regex(/[A-Z]/, schemaMessages.passwordUpper)
   .regex(/[a-z]/, schemaMessages.passwordLower)
   .regex(/[0-9]/, schemaMessages.passwordNumber)

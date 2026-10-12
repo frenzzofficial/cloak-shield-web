@@ -2,6 +2,7 @@ import type { FormListType } from "../../types/form";
 import {
   changeEmailSchema,
   changePasswordSchema,
+  setPasswordSchema,
   updatePreferencesSchema,
   updateProfileSchema,
 } from "../schemas/profile.schema";
@@ -15,6 +16,7 @@ import { createFormRegistry } from "../utils/create-form-registry";
 export const profileSchemaMap = {
   UPDATE_PROFILE: updateProfileSchema,
   CHANGE_PASSWORD: changePasswordSchema,
+  SET_PASSWORD: setPasswordSchema,
   CHANGE_EMAIL: changeEmailSchema,
   UPDATE_PREFERENCES: updatePreferencesSchema,
 } as const;
@@ -136,7 +138,7 @@ export const profileFormConfig: Record<ProfileFormKey, FormListType> = {
   CHANGE_PASSWORD: {
     key: "CHANGE_PASSWORD",
     title: "Change Password",
-    description: "Update your password to keep your account secure",
+    description: "Update your password to keep your account secure.",
     icon: "Lock",
     submit: { label: "Update Password", onSubmitLabel: "Updating..." },
     formInputs: [
@@ -162,6 +164,37 @@ export const profileFormConfig: Record<ProfileFormKey, FormListType> = {
       },
       {
         key: "CHANGEPW-CONFIRM",
+        id: "confirmPassword",
+        label: "Confirm New Password",
+        type: "password",
+        placeholder: "Confirm your new password",
+        autoComplete: "new-password",
+        required: true,
+        errorMessage: "Please confirm your password",
+      },
+    ],
+  },
+
+  SET_PASSWORD: {
+    key: "SET_PASSWORD",
+    title: "Set a Password",
+    description:
+      "Add a password so you can also sign in with your email and password.",
+    icon: "Lock",
+    submit: { label: "Set Password", onSubmitLabel: "Saving..." },
+    formInputs: [
+      {
+        key: "SETPW-NEW",
+        id: "newPassword",
+        label: "New Password",
+        type: "password",
+        placeholder: "Enter your new password",
+        autoComplete: "new-password",
+        required: true,
+        errorMessage: "Password is required",
+      },
+      {
+        key: "SETPW-CONFIRM",
         id: "confirmPassword",
         label: "Confirm New Password",
         type: "password",

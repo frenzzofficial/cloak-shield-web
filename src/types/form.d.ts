@@ -16,6 +16,29 @@ export interface FormInputType {
   errorMessage: string;
   /** Starting value when neither initialValues nor presets give one (e.g. theme: "system"). */
   defaultValue?: string | boolean;
+  maxLength?: number;
+  /** Focus this field when its dialog opens (CenteredModal looks for [data-autofocus]). */
+  autoFocus?: boolean;
+  /** id of an element that describes the field, e.g. a strength meter shown under it. */
+  describedBy?: string;
+}
+
+/** Per-use changes to a field of a config, without touching the config itself. */
+export type FieldOverride = Partial<Omit<FormInputType, "key" | "id">>;
+
+/** Per-use changes to the form-level texts of a config. */
+export type FormOverrides = Partial<
+  Pick<FormListType, "title" | "description" | "submit" | "referTo">
+>;
+
+/** What an onSubmit handler can do to the form it came from. */
+export interface FormHelpers {
+  /** Show a server-side message under one field; it clears when the user edits that field. */
+  setFieldError: (fieldId: string, message: string) => void;
+  /** Show a message above the buttons (null clears it). Cleared on every new submit. */
+  setFormError: (message: string | null) => void;
+  /** Back to the starting values. */
+  reset: () => void;
 }
 
 export interface ReferToType {

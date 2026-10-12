@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import ChangePasswordModal from "@/components/features/profile/ChangePasswordModal";
 import { useNavigationFeature } from "@/components/features/navigation/NavigationProvider";
+import { ProfileModals } from "@/components/features/profile/ProfileModal";
 import {
   ChevronRightIcon,
   LockIcon,
@@ -52,7 +52,7 @@ const ACTIONS: readonly QuickAction[] = [
 ];
 
 interface QuickActionsProps {
-  /** Passed on to the change-password dialog: runs after a successful change. */
+  /** Passed on to the account dialogs: runs after a successful change. */
   onPasswordChanged?: () => void;
 }
 
@@ -111,7 +111,7 @@ const QuickActions = ({ onPasswordChanged }: QuickActionsProps) => {
         </ul>
       </Panel>
 
-      <ChangePasswordModal onChanged={onPasswordChanged} />
+      <ProfileModals onChanged={onPasswordChanged} />
     </>
   );
 };
