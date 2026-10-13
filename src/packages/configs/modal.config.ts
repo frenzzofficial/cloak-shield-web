@@ -9,6 +9,7 @@ export const MODAL_IDS = {
   changePassword: `${TRANSIENT_PREFIX}change-password`,
   updateProfile: `${TRANSIENT_PREFIX}update-profile`,
   preferences: `${TRANSIENT_PREFIX}preferences`,
+  confirmEmail: `${TRANSIENT_PREFIX}confirm-email`,
   changeEmail: `${TRANSIENT_PREFIX}change-email`,
 } as const;
 

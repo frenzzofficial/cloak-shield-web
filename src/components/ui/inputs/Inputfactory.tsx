@@ -20,6 +20,7 @@ export interface InputFactoryProps {
   options?: { label: string; value: string }[];
   maxLength?: number;
   autoFocus?: boolean;
+  readOnly?: boolean;
   describedBy?: string;
   // typed as unknown so callers don't need generics; cast internally
   register: UseFormRegister<Record<string, unknown>>;
@@ -30,6 +31,7 @@ export interface InputFactoryProps {
 /** The optional attributes every text-like field can take from its config. */
 const extra = (props: InputFactoryProps) => ({
   ...(props.maxLength ? { maxLength: props.maxLength } : {}),
+  ...(props.readOnly ? { readOnly: true } : {}),
   ...(props.autoFocus ? { "data-autofocus": true } : {}),
   ...(props.describedBy ? { "aria-describedby": props.describedBy } : {}),
 });

@@ -68,6 +68,11 @@ export const setPasswordSchema = withFieldsMatch(
   "confirmPassword",
 ).describe("Set password form");
 
+/** Mirrors POST /auth/email/resend-verification (the link goes to the account's own address). */
+export const confirmEmailSchema = z.object({
+  email: emailRules,
+});
+
 /** Mirrors POST /auth/email/change-email (a confirmation link goes to the new address). */
 export const changeEmailSchema = z.object({
   newEmail: emailRules,
@@ -90,5 +95,6 @@ export const updatePreferencesSchema = z.object({
 export type UpdateProfileValues = z.infer<typeof updateProfileSchema>;
 export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 export type SetPasswordValues = z.infer<typeof setPasswordSchema>;
+export type ConfirmEmailValues = z.infer<typeof confirmEmailSchema>;
 export type ChangeEmailValues = z.infer<typeof changeEmailSchema>;
 export type UpdatePreferencesValues = z.infer<typeof updatePreferencesSchema>;

@@ -9,9 +9,11 @@ import {
   LockIcon,
   MailIcon,
   MonitorIcon,
+  ShieldCheckIcon,
   UserIcon,
 } from "@/components/ui/icons/dashboard-icons";
 import { MODAL_IDS } from "@/packages/configs/modal.config";
+import { useAccountSummary } from "@/packages/hooks/useAccountSummary";
 import { cn } from "@/packages/utils/cn";
 import Panel from "./Panel";
 
@@ -53,6 +55,13 @@ const ACTIONS: readonly QuickAction[] = [
     modalId: MODAL_IDS.preferences,
   },
   {
+    key: "confirm-email",
+    title: "Confirm Email",
+    description: "Verify your email address",
+    icon: <ShieldCheckIcon className="size-5" />,
+    modalId: MODAL_IDS.confirmEmail,
+  },
+  {
     key: "change-email",
     title: "Change Email",
     description: "Use a different email address",
@@ -68,6 +77,7 @@ interface QuickActionsProps {
 
 const QuickActions = ({ onPasswordChanged }: QuickActionsProps) => {
   const { open } = useNavigationFeature();
+  const { emailVerified } = useAccountSummary();
 
   return (
     <>
@@ -108,7 +118,9 @@ const QuickActions = ({ onPasswordChanged }: QuickActionsProps) => {
                       )}
                     </span>
                     <span className="block truncate text-xs text-muted-foreground">
-                      {action.description}
+                      {action.key === "confirm-email" && emailVerified
+                        ? "Your email address is verified"
+                        : action.description}
                     </span>
                   </span>
                   {available && (

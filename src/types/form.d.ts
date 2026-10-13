@@ -17,6 +17,8 @@ export interface FormInputType {
   /** Starting value when neither initialValues nor presets give one (e.g. theme: "system"). */
   defaultValue?: string | boolean;
   maxLength?: number;
+  /** Shown but not editable (still part of the submitted values). */
+  readOnly?: boolean;
   /** In a two-column layout, take the whole row. */
   fullWidth?: boolean;
   /** Focus this field when its dialog opens (CenteredModal looks for [data-autofocus]). */

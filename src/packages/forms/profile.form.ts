@@ -2,6 +2,7 @@ import type { FormListType } from "../../types/form";
 import {
   changeEmailSchema,
   changePasswordSchema,
+  confirmEmailSchema,
   setPasswordSchema,
   updatePreferencesSchema,
   updateProfileSchema,
@@ -18,6 +19,7 @@ export const profileSchemaMap = {
   CHANGE_PASSWORD: changePasswordSchema,
   SET_PASSWORD: setPasswordSchema,
   CHANGE_EMAIL: changeEmailSchema,
+  CONFIRM_EMAIL: confirmEmailSchema,
   UPDATE_PREFERENCES: updatePreferencesSchema,
 } as const;
 
@@ -204,6 +206,27 @@ export const profileFormConfig: Record<ProfileFormKey, FormListType> = {
         autoComplete: "new-password",
         required: true,
         errorMessage: "Please confirm your password",
+      },
+    ],
+  },
+
+  CONFIRM_EMAIL: {
+    key: "CONFIRM_EMAIL",
+    title: "Confirm Email",
+    description: "We'll send a verification link to your current address",
+    icon: "ShieldCheck",
+    submit: { label: "Send verification link", onSubmitLabel: "Sending..." },
+    formInputs: [
+      {
+        key: "CONFIRMEMAIL-EMAIL",
+        id: "email",
+        label: "Email",
+        type: "email",
+        placeholder: "",
+        autoComplete: "email",
+        required: true,
+        readOnly: true,
+        errorMessage: "Email is required",
       },
     ],
   },
