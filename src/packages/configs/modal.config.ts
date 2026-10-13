@@ -7,6 +7,9 @@
 export const TRANSIENT_PREFIX = "modal:";
 export const MODAL_IDS = {
   changePassword: `${TRANSIENT_PREFIX}change-password`,
+  updateProfile: `${TRANSIENT_PREFIX}update-profile`,
+  preferences: `${TRANSIENT_PREFIX}preferences`,
+  changeEmail: `${TRANSIENT_PREFIX}change-email`,
 } as const;
 
 export type ModalId = (typeof MODAL_IDS)[keyof typeof MODAL_IDS];

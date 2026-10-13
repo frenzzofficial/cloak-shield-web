@@ -53,12 +53,6 @@ export interface ChangePasswordResponse {
   revokedSessions: number;
 }
 
-export interface UpdateProfileRequestBody {
-  fullname?: string;
-  /** An empty string clears the phone number. */
-  phone?: string;
-}
-
 export interface SuccessResponse<T = unknown> {
   success: true;
   message: string;

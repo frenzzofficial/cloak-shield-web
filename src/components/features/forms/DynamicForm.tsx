@@ -232,7 +232,13 @@ const FormFields = ({
         }
 
         return (
-          <div key={input.key} className="flex flex-col gap-2 p-1">
+          <div
+            key={input.key}
+            className={cn(
+              "flex flex-col gap-2 p-1",
+              input.fullWidth && "sm:col-span-2",
+            )}
+          >
             {input.type !== "checkbox" && (
               <label htmlFor={input.id} className="text-sm font-medium">
                 {input.label}

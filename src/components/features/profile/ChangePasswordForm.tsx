@@ -3,9 +3,12 @@
 import { useId, useMemo } from "react";
 import { toast } from "sonner";
 import ProfileForm from "@/components/features/profile/ProfileForm";
+import {
+  modalActions,
+  ProfileModalFrame,
+} from "@/components/features/profile/ProfileModalFrame";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { Button, Card } from "@/components/ui";
-import { CloseIcon, LockIcon } from "@/components/ui/icons/dashboard-icons";
+import { LockIcon } from "@/components/ui/icons/dashboard-icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { changePassword } from "@/packages/services/auth.services";
@@ -84,30 +87,13 @@ const ChangePasswordForm = ({
   };
 
   return (
-    <Card className="p-7 sm:p-8">
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Close"
-        className="absolute top-0 right-0 flex size-10 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/3 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
-      >
-        <CloseIcon className="size-4.5" />
-      </button>
-
-      <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/12 text-primary ring-1 ring-primary/25 shadow-[0_0_30px_-8px_var(--primary)]">
-        <LockIcon className="size-7" />
-      </span>
-
-      <h2
-        id={titleId}
-        className="mt-5 text-2xl font-semibold tracking-tight sm:text-[28px]"
-      >
-        {config.title}
-      </h2>
-      <p className="mt-1.5 text-sm text-muted-foreground">
-        {config.description}
-      </p>
-
+    <ProfileModalFrame
+      titleId={titleId}
+      onClose={onClose}
+      icon={<LockIcon className="size-7" />}
+      title={config.title}
+      description={config.description}
+    >
       {/* key: switching between the two forms (hasPassword flips) starts a fresh form. */}
       <ProfileForm
         key={formKey}
@@ -138,21 +124,7 @@ const ChangePasswordForm = ({
           />
         }
         onSubmit={onSubmit}
-        renderActions={({ pending, submitLabel }) => (
-          <div className="flex flex-col-reverse gap-3 pt-1 sm:flex-row">
-            <Button
-              type="button"
-              onClick={onClose}
-              className="btn-outline flex-1"
-              disabled={pending}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="flex-[1.4]" disabled={pending}>
-              {submitLabel}
-            </Button>
-          </div>
-        )}
+        renderActions={modalActions(onClose)}
       >
         <p className="text-xs text-muted-foreground">
           {hasPassword
@@ -160,7 +132,7 @@ const ChangePasswordForm = ({
             : "You will stay signed in on this device."}
         </p>
       </ProfileForm>
-    </Card>
+    </ProfileModalFrame>
   );
 };
 

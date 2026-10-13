@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import AuthForm from "@/components/features/auth/forms/AuthForm";
 import SocialSignIn from "@/components/features/auth/social/SocialSignIn";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { Link } from "@/components/ui";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { safeRedirectPath } from "@/packages/utils/safe-redirect";
 import type { SignupRequestBody } from "@/types/auth";
@@ -47,7 +48,19 @@ const SignupForm = () => {
       isLoading={pending}
       className="max-w-200"
       footer={<SocialSignIn />}
-    />
+    >
+      <p className="text-xs text-muted-foreground">
+        Read the{" "}
+        <Link href="/terms" variant="secondary" className="text-xs underline">
+          Terms
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" variant="secondary" className="text-xs underline">
+          Privacy Policy
+        </Link>
+        .
+      </p>
+    </AuthForm>
   );
 };
 

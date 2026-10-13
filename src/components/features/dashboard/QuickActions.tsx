@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useNavigationFeature } from "@/components/features/navigation/NavigationProvider";
 import { ProfileModals } from "@/components/features/profile/ProfileModal";
 import {
+  AtIcon,
   ChevronRightIcon,
   LockIcon,
   MailIcon,
@@ -29,6 +30,7 @@ const ACTIONS: readonly QuickAction[] = [
     title: "Update Profile",
     description: "Change your personal information",
     icon: <UserIcon className="size-5" />,
+    modalId: MODAL_IDS.updateProfile,
   },
   {
     key: "password",
@@ -48,6 +50,14 @@ const ACTIONS: readonly QuickAction[] = [
     title: "Email Preferences",
     description: "Configure your notifications",
     icon: <MailIcon className="size-5" />,
+    modalId: MODAL_IDS.preferences,
+  },
+  {
+    key: "change-email",
+    title: "Change Email",
+    description: "Use a different email address",
+    icon: <AtIcon className="size-5" />,
+    modalId: MODAL_IDS.changeEmail,
   },
 ];
 

@@ -3,12 +3,11 @@ import { ImageLogo, Link } from "@/components/ui";
 import NavActions from "./NavActions";
 
 const links = [
-  { label: "Home", href: "#", active: true },
-  { label: "Features", href: "#features" },
-  { label: "Services", href: "#services" },
-  { label: "Docs", href: "#docs" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/", active: true },
+  { label: "Features", href: "/features" },
+  { label: "Services", href: "/services" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Header() {

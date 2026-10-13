@@ -12,7 +12,6 @@ import type {
   SigninRequestBody,
   SignupRequestBody,
   SuccessResponse,
-  UpdateProfileRequestBody,
   User,
 } from "@/types/auth";
 
@@ -112,23 +111,6 @@ export const resetPassword = async (
     },
   );
   return data;
-};
-
-/**
- * Updates the name and/or phone. The email address is NOT changed here: the backend verifies a
- * new address through its own change-email flow (password + confirmation link).
- */
-export const updateProfile = async (
-  body: UpdateProfileRequestBody,
-): Promise<User> => {
-  const { data } = await apiClient.patch<{ user: User }>(
-    AUTH_ENDPOINTS.updateProfile,
-    {
-      ...(body.fullname === undefined ? {} : { fullname: body.fullname }),
-      ...(body.phone === undefined ? {} : { phone: body.phone || null }),
-    },
-  );
-  return data.user;
 };
 
 // ─── Sign in with a provider (Google, and Discord once the backend has it) ──
