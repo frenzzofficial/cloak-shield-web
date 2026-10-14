@@ -1,3 +1,4 @@
+export { default as Accordion } from "./accordion/Accordion";
 export { default as Button } from "./button/Button";
 export { default as DangerButton } from "./button/DangerButton";
 export { default as Card } from "./card/Card";
