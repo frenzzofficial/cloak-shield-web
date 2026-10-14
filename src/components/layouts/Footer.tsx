@@ -6,7 +6,7 @@ import {
   LinkedinIcon,
   XIcon,
   YoutubeIcon,
-} from "@/components/ui/icons/Icons";
+} from "@/components/ui/icon/Icons";
 import ImageLogo from "../ui/image/ImageLogo";
 
 const links = ["Docs", "GitHub", "Support", "Pricing", "Contact"];

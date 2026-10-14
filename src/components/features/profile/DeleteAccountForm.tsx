@@ -7,7 +7,7 @@ import ProfileForm, {
 import { ProfileModalFrame } from "@/components/features/profile/ProfileModalFrame";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Button, DangerButton } from "@/components/ui";
-import { TrashIcon } from "@/components/ui/icons/Icons";
+import { TrashIcon } from "@/components/ui/icon/Icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { deleteAccount } from "@/packages/services/account.services";

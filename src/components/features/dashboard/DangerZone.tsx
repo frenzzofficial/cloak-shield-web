@@ -3,7 +3,7 @@
 import { useNavigationFeature } from "@/components/features/navigation/NavigationProvider";
 import DangerAlert from "@/components/features/profile/DangerAlert";
 import { DangerButton } from "@/components/ui";
-import { TrashIcon } from "@/components/ui/icons/Icons";
+import { TrashIcon } from "@/components/ui/icon/Icons";
 import { MODAL_IDS } from "@/packages/configs/modal.config";
 import Panel from "./Panel";
 

@@ -10,7 +10,7 @@ import {
   modalActions,
   ProfileModalFrame,
 } from "@/components/features/profile/ProfileModalFrame";
-import { MailIcon } from "@/components/ui/icons/Icons";
+import { MailIcon } from "@/components/ui/icon/Icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { useAccount } from "@/packages/hooks/useAccount";

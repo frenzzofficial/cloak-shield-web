@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AlertIcon } from "@/components/ui/icons/Icons";
+import { AlertIcon } from "@/components/ui/icon/Icons";
 
 /** The red warning box shared by the Danger Zone block and the delete dialog. */
 const DangerAlert = ({ children }: { children: ReactNode }) => (

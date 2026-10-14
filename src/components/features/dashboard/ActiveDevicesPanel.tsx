@@ -1,4 +1,4 @@
-import { MonitorIcon } from "@/components/ui/icons/Icons";
+import { MonitorIcon } from "@/components/ui/icon/Icons";
 import {
   type DeviceSession,
   timeAgo,

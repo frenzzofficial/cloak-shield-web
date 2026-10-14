@@ -1,5 +1,5 @@
 "use client";
-import { ArrowRightIcon } from "@/components/ui/icons/Icons";
+import { ArrowRightIcon } from "@/components/ui/icon/Icons";
 import { useAuth } from "../providers/AuthProvider";
 import { Link } from "../ui";
 import ImageAvatar from "../ui/image/ImageAvatar";

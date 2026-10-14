@@ -10,7 +10,7 @@ import {
   MonitorIcon,
   ShieldCheckIcon,
   UserIcon,
-} from "@/components/ui/icons/Icons";
+} from "@/components/ui/icon/Icons";
 import { MODAL_IDS } from "@/packages/configs/modal.config";
 import { useAccountSummary } from "@/packages/hooks/useAccountSummary";
 import { cn } from "@/packages/utils/cn";

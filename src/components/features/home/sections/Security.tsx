@@ -1,5 +1,5 @@
 import ImageLogo from "@/components/ui/image/ImageLogo";
-import { CheckIcon, LockIcon, ShieldCheckIcon } from "../../../ui/icons/Icons";
+import { CheckIcon, LockIcon, ShieldCheckIcon } from "../../../ui/icon/Icons";
 
 const leftChecks = [
   "HTTP-only & secure cookies",

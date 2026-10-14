@@ -2,7 +2,7 @@
 
 import { type ReactNode, useEffect, useRef } from "react";
 import { Button, Card } from "@/components/ui";
-import { CloseIcon } from "@/components/ui/icons/Icons";
+import { CloseIcon } from "@/components/ui/icon/Icons";
 
 interface ProfileModalFrameProps {
   titleId: string;

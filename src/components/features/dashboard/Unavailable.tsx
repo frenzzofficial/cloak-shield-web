@@ -1,4 +1,4 @@
-import { AlertIcon } from "@/components/ui/icons/Icons";
+import { AlertIcon } from "@/components/ui/icon/Icons";
 
 /** Shown in a Panel whose data could not be loaded. */
 const Unavailable = ({ what }: { what: string }) => (

@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@/components/ui/icons/Icons";
+import { ArrowRightIcon } from "@/components/ui/icon/Icons";
 
 export default function CTA() {
   return (
