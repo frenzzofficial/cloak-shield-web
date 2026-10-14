@@ -1,8 +1,9 @@
 import LandingLoader from "./LandingLoader";
 import CTA from "./sections/CTA";
+import Features from "./sections/Features";
 import Hero from "./sections/Hero";
+import Pricing from "./sections/Pricing";
 import Security from "./sections/Security";
-import Services from "./sections/Services";
 import TechStack from "./sections/TechStack";
 
 const HomePage = () => {
@@ -10,9 +11,10 @@ const HomePage = () => {
     <main className="min-h-screen bg-[#02040a]">
       <LandingLoader />
       <Hero />
-      <Services />
+      <Features />
       <TechStack />
       <Security />
+      <Pricing />
       <CTA />
     </main>
   );

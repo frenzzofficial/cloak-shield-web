@@ -4,9 +4,8 @@ import NavActions from "./NavActions";
 
 const links = [
   { label: "Home", href: "/", active: true },
-  { label: "Features", href: "/features" },
-  { label: "Services", href: "/services" },
-  { label: "Pricing", href: "/pricing" },
+  { label: "Features", href: "/#features" },
+  { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
 ];
