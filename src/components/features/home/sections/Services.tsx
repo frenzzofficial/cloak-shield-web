@@ -4,7 +4,7 @@ import {
   LayersIcon,
   ShieldCheckIcon,
   UserIcon,
-} from "../../../ui/icons/icons";
+} from "../../../ui/icons/Icons";
 
 const services = [
   {

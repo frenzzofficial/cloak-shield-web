@@ -63,3 +63,17 @@ export const confirmEmailChange = async (
   );
   return data;
 };
+
+/**
+ * Permanently deletes the signed-in account. The backend re-checks the password (accounts
+ * without one send none), removes everything and clears the session cookies.
+ */
+export const deleteAccount = async (
+  password?: string,
+): Promise<SuccessResponse> => {
+  const { data } = await apiClient.post<SuccessResponse>(
+    AUTH_ENDPOINTS.deleteAccount,
+    password ? { password } : {},
+  );
+  return data;
+};

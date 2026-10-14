@@ -9,7 +9,7 @@ import {
   ProfileModalFrame,
 } from "@/components/features/profile/ProfileModalFrame";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { AtIcon } from "@/components/ui/icons/dashboard-icons";
+import { AtIcon } from "@/components/ui/icons/Icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { changeEmail } from "@/packages/services/account.services";

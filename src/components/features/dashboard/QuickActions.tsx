@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { useNavigationFeature } from "@/components/features/navigation/NavigationProvider";
-import { ProfileModals } from "@/components/features/profile/ProfileModal";
 import {
   AtIcon,
   ChevronRightIcon,
@@ -11,7 +10,7 @@ import {
   MonitorIcon,
   ShieldCheckIcon,
   UserIcon,
-} from "@/components/ui/icons/dashboard-icons";
+} from "@/components/ui/icons/Icons";
 import { MODAL_IDS } from "@/packages/configs/modal.config";
 import { useAccountSummary } from "@/packages/hooks/useAccountSummary";
 import { cn } from "@/packages/utils/cn";
@@ -70,71 +69,62 @@ const ACTIONS: readonly QuickAction[] = [
   },
 ];
 
-interface QuickActionsProps {
-  /** Passed on to the account dialogs: runs after a successful change. */
-  onPasswordChanged?: () => void;
-}
-
-const QuickActions = ({ onPasswordChanged }: QuickActionsProps) => {
+const QuickActions = () => {
   const { open } = useNavigationFeature();
   const { emailVerified } = useAccountSummary();
 
   return (
-    <>
-      <Panel title="Quick Actions">
-        <ul className="-mx-1 flex flex-col gap-1">
-          {ACTIONS.map((action) => {
-            const { modalId } = action;
-            const available = modalId !== undefined;
-            return (
-              <li key={action.key}>
-                <button
-                  type="button"
-                  disabled={!available}
-                  onClick={modalId ? () => open(modalId) : undefined}
+    <Panel title="Quick Actions">
+      <ul className="-mx-1 flex flex-col gap-1">
+        {ACTIONS.map((action) => {
+          const { modalId } = action;
+          const available = modalId !== undefined;
+          return (
+            <li key={action.key}>
+              <button
+                type="button"
+                disabled={!available}
+                onClick={modalId ? () => open(modalId) : undefined}
+                className={cn(
+                  "group flex w-full items-center gap-3.5 rounded-xl border border-transparent p-2.5 text-left transition-colors",
+                  available
+                    ? "cursor-pointer hover:border-primary/30 hover:bg-primary/8 focus-visible:border-primary/50 focus-visible:bg-primary/8 focus-visible:outline-none"
+                    : "cursor-not-allowed opacity-55",
+                )}
+              >
+                <span
                   className={cn(
-                    "group flex w-full items-center gap-3.5 rounded-xl border border-transparent p-2.5 text-left transition-colors",
-                    available
-                      ? "cursor-pointer hover:border-primary/30 hover:bg-primary/8 focus-visible:border-primary/50 focus-visible:bg-primary/8 focus-visible:outline-none"
-                      : "cursor-not-allowed opacity-55",
+                    "flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/5 text-foreground/90 ring-1 ring-white/8 transition-colors",
+                    available &&
+                      "group-hover:bg-primary/15 group-hover:text-primary group-hover:ring-primary/30",
                   )}
                 >
-                  <span
-                    className={cn(
-                      "flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/5 text-foreground/90 ring-1 ring-white/8 transition-colors",
-                      available &&
-                        "group-hover:bg-primary/15 group-hover:text-primary group-hover:ring-primary/30",
+                  {action.icon}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2 text-sm font-medium">
+                    <span className="truncate">{action.title}</span>
+                    {!available && (
+                      <span className="shrink-0 rounded-full border border-white/10 px-1.5 py-px text-[9px] font-medium tracking-wide text-muted-foreground uppercase">
+                        Soon
+                      </span>
                     )}
-                  >
-                    {action.icon}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-2 text-sm font-medium">
-                      <span className="truncate">{action.title}</span>
-                      {!available && (
-                        <span className="shrink-0 rounded-full border border-white/10 px-1.5 py-px text-[9px] font-medium tracking-wide text-muted-foreground uppercase">
-                          Soon
-                        </span>
-                      )}
-                    </span>
-                    <span className="block truncate text-xs text-muted-foreground">
-                      {action.key === "confirm-email" && emailVerified
-                        ? "Your email address is verified"
-                        : action.description}
-                    </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {action.key === "confirm-email" && emailVerified
+                      ? "Your email address is verified"
+                      : action.description}
                   </span>
-                  {available && (
-                    <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </Panel>
-
-      <ProfileModals onChanged={onPasswordChanged} />
-    </>
+                </span>
+                {available && (
+                  <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+                )}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </Panel>
   );
 };
 

@@ -19,5 +19,6 @@ export const AUTH_ENDPOINTS = {
   changeEmail: `${EMAIL}/change-email`,
   confirmEmailChange: `${EMAIL}/confirm-email-change`,
   profile: `${V1}/account/profile`,
+  deleteAccount: `${V1}/account/delete`,
   preferences: `${V1}/account/preferences`,
 } as const;

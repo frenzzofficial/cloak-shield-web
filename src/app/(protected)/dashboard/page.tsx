@@ -2,12 +2,14 @@
 
 import AccountInfoPanel from "@/components/features/dashboard/AccountInfoPanel";
 import ActiveDevicesPanel from "@/components/features/dashboard/ActiveDevicesPanel";
+import DangerZone from "@/components/features/dashboard/DangerZone";
 import DashboardHeader from "@/components/features/dashboard/DashboardHeader";
 import ProfileOverviewPanel from "@/components/features/dashboard/ProfileOverviewPanel";
 import ProtectionBanner from "@/components/features/dashboard/ProtectionBanner";
 import QuickActions from "@/components/features/dashboard/QuickActions";
 import RecentActivityPanel from "@/components/features/dashboard/RecentActivityPanel";
 import StatsGrid from "@/components/features/dashboard/StatsGrid";
+import { ProfileModals } from "@/components/features/profile/ProfileModal";
 import { useAccountSummary } from "@/packages/hooks/useAccountSummary";
 import { useDashboardData } from "@/packages/hooks/useDashboardData";
 
@@ -36,10 +38,13 @@ const DashboardPage = () => {
 
         <aside className="flex min-w-0 flex-col gap-6">
           <ProfileOverviewPanel account={account} />
-          <QuickActions onPasswordChanged={reload} />
+          <QuickActions />
           <ActiveDevicesPanel sessions={sessions} />
+          <DangerZone />
         </aside>
       </div>
+
+      <ProfileModals onChanged={reload} />
     </div>
   );
 };

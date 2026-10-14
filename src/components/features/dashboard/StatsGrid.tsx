@@ -3,7 +3,7 @@ import {
   ClockIcon,
   MonitorIcon,
   ShieldCheckIcon,
-} from "@/components/ui/icons/dashboard-icons";
+} from "@/components/ui/icons/Icons";
 import {
   type ActivityEntry,
   type DeviceSession,

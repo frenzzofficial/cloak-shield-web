@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui";
-import { LogOutIcon } from "@/components/ui/icons/dashboard-icons";
+import { LogOutIcon } from "@/components/ui/icons/Icons";
 import { useSignOut } from "@/packages/hooks/useSignOut";
 import { todayLabel } from "@/packages/utils/dashboard.utils";
 

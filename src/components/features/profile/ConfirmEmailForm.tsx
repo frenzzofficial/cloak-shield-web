@@ -11,7 +11,7 @@ import {
 } from "@/components/features/profile/ProfileModalFrame";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Button } from "@/components/ui";
-import { ShieldCheckIcon } from "@/components/ui/icons/dashboard-icons";
+import { ShieldCheckIcon } from "@/components/ui/icons/Icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { useAccountSummary } from "@/packages/hooks/useAccountSummary";

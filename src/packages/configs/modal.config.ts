@@ -10,6 +10,7 @@ export const MODAL_IDS = {
   updateProfile: `${TRANSIENT_PREFIX}update-profile`,
   preferences: `${TRANSIENT_PREFIX}preferences`,
   confirmEmail: `${TRANSIENT_PREFIX}confirm-email`,
+  deleteAccount: `${TRANSIENT_PREFIX}delete-account`,
   changeEmail: `${TRANSIENT_PREFIX}change-email`,
 } as const;
 

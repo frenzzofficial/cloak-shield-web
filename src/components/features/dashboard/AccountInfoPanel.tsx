@@ -3,7 +3,7 @@ import {
   KeyIcon,
   MailIcon,
   UserIcon,
-} from "@/components/ui/icons/dashboard-icons";
+} from "@/components/ui/icons/Icons";
 import type { AccountSummary } from "@/packages/hooks/useAccountSummary";
 import InfoRow from "./InfoRow";
 import Panel from "./Panel";

@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui";
-import { DiscordIcon, GoogleIcon } from "@/components/ui/icons/icons";
+import { DiscordIcon, GoogleIcon } from "@/components/ui/icons/Icons";
 import {
   getOAuthProviders,
   startOAuthSignIn,

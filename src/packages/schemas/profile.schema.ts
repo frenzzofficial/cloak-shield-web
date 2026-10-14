@@ -73,6 +73,23 @@ export const confirmEmailSchema = z.object({
   email: emailRules,
 });
 
+/**
+ * Mirrors POST /account/delete. The typed word is only a guard against a misclick, so it is
+ * checked here and never sent; `password` is the re-authentication the backend asks for
+ * (absent for accounts that have none, which re-authenticate by a recent sign-in).
+ */
+export const DELETE_CONFIRMATION_WORD = "DELETE";
+
+export const deleteAccountSchema = z.object({
+  confirmation: z
+    .string()
+    .refine(
+      (value) => value.trim() === DELETE_CONFIRMATION_WORD,
+      `Type ${DELETE_CONFIRMATION_WORD} to confirm`,
+    ),
+  password: z.string().optional(),
+});
+
 /** Mirrors POST /auth/email/change-email (a confirmation link goes to the new address). */
 export const changeEmailSchema = z.object({
   newEmail: emailRules,
@@ -96,5 +113,6 @@ export type UpdateProfileValues = z.infer<typeof updateProfileSchema>;
 export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 export type SetPasswordValues = z.infer<typeof setPasswordSchema>;
 export type ConfirmEmailValues = z.infer<typeof confirmEmailSchema>;
+export type DeleteAccountValues = z.infer<typeof deleteAccountSchema>;
 export type ChangeEmailValues = z.infer<typeof changeEmailSchema>;
 export type UpdatePreferencesValues = z.infer<typeof updatePreferencesSchema>;

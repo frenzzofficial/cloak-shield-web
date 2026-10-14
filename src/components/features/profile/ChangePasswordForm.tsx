@@ -8,7 +8,7 @@ import {
   ProfileModalFrame,
 } from "@/components/features/profile/ProfileModalFrame";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { LockIcon } from "@/components/ui/icons/dashboard-icons";
+import { LockIcon } from "@/components/ui/icons/Icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { changePassword } from "@/packages/services/auth.services";

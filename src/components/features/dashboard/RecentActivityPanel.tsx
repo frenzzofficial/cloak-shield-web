@@ -2,7 +2,7 @@ import {
   AlertIcon,
   ClockIcon,
   ShieldCheckIcon,
-} from "@/components/ui/icons/dashboard-icons";
+} from "@/components/ui/icons/Icons";
 import {
   type ActivityEntry,
   eventLabel,

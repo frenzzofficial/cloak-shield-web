@@ -1,4 +1,4 @@
-import { MonitorIcon } from "@/components/ui/icons/dashboard-icons";
+import { MonitorIcon } from "@/components/ui/icons/Icons";
 import {
   type DeviceSession,
   timeAgo,

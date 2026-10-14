@@ -11,7 +11,7 @@ import {
   ProfileModalFrame,
 } from "@/components/features/profile/ProfileModalFrame";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { UserIcon } from "@/components/ui/icons/dashboard-icons";
+import { UserIcon } from "@/components/ui/icons/Icons";
 import { getAuthErrorMessage } from "@/packages/errors/auth-error";
 import { profileFormConfig } from "@/packages/forms/profile.form";
 import { useAccount } from "@/packages/hooks/useAccount";

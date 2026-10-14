@@ -4,6 +4,7 @@ import type { ProfileModalFormProps } from "@/types/modal";
 import ChangeEmailForm from "../../components/features/profile/ChangeEmailForm";
 import ChangePasswordForm from "../../components/features/profile/ChangePasswordForm";
 import ConfirmEmailForm from "../../components/features/profile/ConfirmEmailForm";
+import DeleteAccountForm from "../../components/features/profile/DeleteAccountForm";
 import PreferencesForm from "../../components/features/profile/PreferencesForm";
 import UpdateProfileForm from "../../components/features/profile/UpdateProfileForm";
 
@@ -26,6 +27,7 @@ export const PROFILE_MODALS = {
   [MODAL_IDS.updateProfile]: { Form: UpdateProfileForm, maxWidth: "44rem" },
   [MODAL_IDS.preferences]: { Form: PreferencesForm, maxWidth: "34rem" },
   [MODAL_IDS.confirmEmail]: { Form: ConfirmEmailForm, maxWidth: "34rem" },
+  [MODAL_IDS.deleteAccount]: { Form: DeleteAccountForm, maxWidth: "34rem" },
   [MODAL_IDS.changeEmail]: { Form: ChangeEmailForm, maxWidth: "34rem" },
 } as const satisfies Record<string, ProfileModalConfig>;
 

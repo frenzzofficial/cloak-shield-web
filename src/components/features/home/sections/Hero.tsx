@@ -10,7 +10,7 @@ import {
   LockIcon,
   MailIcon,
   ShieldCheckIcon,
-} from "../../../ui/icons/icons";
+} from "../../../ui/icons/Icons";
 
 const trustPoints = [
   {
